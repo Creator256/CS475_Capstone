@@ -1,6 +1,6 @@
 package final_project;
 import java.sql.*;
-public class Person {
+public class DBBean {
 
 	static Connection con;
 	static String url = "jdbc:mysql://localhost/advising_app?useSSL=false";
@@ -8,20 +8,6 @@ public class Person {
 	static String password = "admin";
 	static String statem = "select * from person";
 	
-	public static void main(String[] args) {
-		_connection();
-		try {
-			PreparedStatement st = con.prepareStatement(statem);
-			ResultSet rs = st.executeQuery();
-			while(rs.next()) {
-				System.out.println(rs.getString("name") + " " + rs.getString("id"));
-			}
-		}
-		catch(Exception ex) {
-			System.out.println("You messed up");
-		}
-		
-	}
 	public static void _connection(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");

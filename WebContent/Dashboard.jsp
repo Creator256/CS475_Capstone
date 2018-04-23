@@ -82,6 +82,7 @@
         <div class="container-fluid">
         <div class="row-fluid">
           <div class="span12">
+            
             <div class="span4" style="word-wrap: break-word;">
               <ul class="nav nav-list">
                 <li style="border: 5px solid black; padding: 10px; margin: 0px;">

@@ -27,10 +27,10 @@
 		</a>
  	</div>
  	
-<div >
+<div style="margin:0 auto; width: 80%; height: 50%;">
 	<div align="center" style="padding-top:5%; padding-bottom:5%">
  		<!--  <img src="images/icon.png" class="img-rounded" alt="icon"> -->
- 		<img src="images/BLU_AVA_ICON.png" class="img-rounded" alt="avatar">
+ 		<img src="images/BLU_AVA_ICON.png" class="img-rounded" alt="avatar" height=50%>
  	</div>
 
  	

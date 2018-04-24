@@ -12,18 +12,39 @@
 </head>
 
 <body>
-<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
-					<table class="table table-bordered">	
-						<tr>1</tr>
-						<tr>2</tr>
-						<tr>3</tr>
-						<tr>4</tr>
-					</table>
-			</div>
-		</div>
-</div>
+
+	<div style="background-color:#0c2340;" align="center">
+		<a href="https://my.elmhurst.edu/" >
+ 		 <img src="images/clogo.png" class="img-rounded" alt="logo">
+		</a>
+ 	</div>
+
+<div class="container" style="padding-top:1%">
+	<div class="col-xs-12">
+		<table class="table table-bordered table-hover">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">eNumber</th>
+					<th scope="col">First</th>
+					<th scope="col">Last</th>
+					<th scope="col">Major</th>
+					<th scope="col">field</th>
+					<th scope="col">field</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class='clickable-row' data-href='url:https://www.elmhurst.edu/academics/departments/computer-science-information-systems/faculty/'>
+					<th scope="row">e000000</th>
+					<th scope="col">Rotator Rotator Rotator</th>
+					<th scope="col">No lemon, no melon </th>
+					<th scope="col">Mathematics and the Foundations of Computer Science</th>
+					<th scope="col">field</th>
+					<th scope="col">field</th>
+				</tr>
+			</tbody>
+		</table>
+ 	</div>
+</div> 
 
 	<!-- <div class="container-fluid">
 		<div class="row-fluid">

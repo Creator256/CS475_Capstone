@@ -56,3 +56,16 @@ div.panel {
 	animation: 					fadein 0.4s;
 	-webkit-animation: 			fadein 0.4s;
 }
+div.contactContainer {
+	background-color:	 		white;
+	color: 						black;
+	padding:					15px;
+}
+div.contactInner {
+	overflow:					auto;
+    background-color:	 		white;
+	color: 						black;
+	margin:						5px;
+	padding:					5px 10px 5px 10px;
+	border:						2px solid;
+}

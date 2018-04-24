@@ -30,9 +30,9 @@
  	</div>
  	
 	<div >
-		<div align="center" style="padding-top:5%; padding-bottom:5%">
+		<div align="center" style="padding-top:2%; padding-bottom:2%">
 	 		<!--  <img src="images/icon.png" class="img-rounded" alt="icon"> -->
-	 		<img src="images/BLU_AVA_ICON.png" class="img-rounded" alt="avatar" width="20%" height="20%">
+	 		<img src="images/BLU_AVA_ICON.png" class="img-rounded" alt="avatar" width="15%" height="15%">
 	 	</div>
 	
 	 	

@@ -13,11 +13,38 @@
 
 <body>
 
-	<div style="background-color:#0c2340;" align="center">
-		<a href="https://my.elmhurst.edu/" >
- 		 <img src="images/clogo.png" class="img-rounded" alt="logo">
-		</a>
- 	</div>
+<nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
+
+      <a class="navbar-brand" href="Dashboard.jsp"> <img src="images/clogo.png" class="img-rounded"> </a>
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="Dashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Scheduler.jsp">Scheduler</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Catalog.jsp">Course Catalog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Contact.jsp">Contact</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+        	<li class="nav-item">
+          		<a class="nav-link disabled" href="#">Signed in as, userName</a>
+          	</li>
+        	<li class="nav-item">
+          		<a class="nav-link" href="Logout.jsp">Logout</a>
+          	</li>
+        </ul>
+      </div>
+    </nav>
 
 <div class="container" style="padding-top:1%">
 	<div class="col-xs-12">

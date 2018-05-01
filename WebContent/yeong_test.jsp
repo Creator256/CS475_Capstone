@@ -1,21 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<html>
-
-
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-	<link href="css/bootstrap.css" rel="stylesheet">
-	<link href="PageLayout.css" rel="stylesheet">
-    <link href="bootstrap-responsive.css" rel="stylesheet">
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>tester</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Tester</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<!-- Custom page CSS  -->
+    <link href="PageLayout.css" rel="stylesheet">
 </head>
 
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
-      <a class="navbar-brand" href="Dashboard.jsp"> <img src="images/clogo.png" class="img-rounded"> </a>
+      <a class="navbar-brand page-scroll" href="Dashboard.jsp"> <img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"> </a>
       <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -72,6 +77,7 @@
 		</table>
  	</div>
 </div> 
+
 
 	<!-- <div class="container-fluid">
 		<div class="row-fluid">

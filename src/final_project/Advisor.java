@@ -11,6 +11,55 @@ public class Advisor {
 	private String lastName;
 	private boolean loggedIn;
 	private Map<String, String> studentinfo;
+	
+	public String geteNumber() {
+		return eNumber;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
+	public Map<String, String> getStudentinfo() {
+		return studentinfo;
+	}
+
+	public int getPersonType() {
+		return personType;
+	}
+
+	public void seteNumber(String eNumber) {
+		this.eNumber = eNumber;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
+
+	public void setStudentinfo(Map<String, String> studentinfo) {
+		this.studentinfo = studentinfo;
+	}
+
+	public void setPersonType(int personType) {
+		this.personType = personType;
+	}
+
 	private int personType;
 	
 	Advisor(DBBean db, String eN, String fN, String lN) {

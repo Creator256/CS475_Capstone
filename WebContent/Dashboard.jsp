@@ -51,16 +51,6 @@
     </nav>
 
     <main role="main">
-
-      <!-- Main jumbotron for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <div class="container">
-          <h1 class="display-3"><em>Elmhurst Planner</em></h1>
-          <p>The fast and simple way to plan.</p>
-          <p><a class="btn btn-primary btn-lg" href="Contact.jsp" role="button">Learn more »</a></p>
-        </div>
-      </div>
-
       <div class="container">
         <!-- Example row of columns -->
         <div class="row">

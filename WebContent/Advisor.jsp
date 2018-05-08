@@ -1,116 +1,109 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Elmhurst Planner</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="">
-		<meta name="author" content="">
 
-		<!-- Le styles -->
-		<link href="bootstrap.css" rel="stylesheet">
-		<link href="bootstrap-responsive.css" rel="stylesheet">
-		<style type="text/css">
-		body {
-			padding-top: 5px;
-			padding-bottom: 40px;
-		}
-		.sidebar-nav {
-			padding: 9px 0;
-		}
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-		@media (max-width: 980px) {
-		/* Enable use of floated navbar text */
-			.navbar-text.pull-right {
-				float: none;
-				padding-left: 5px;
-				padding-right: 5px;
-			}
-		}
-		</style>
-		<link href="PageLayout.css" rel="stylesheet">
+    <title>I'm Sorry Dave! I can't let you do that.</title>
 
-		<!-- Fav and touch icons -->
-		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-		<link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-		<link rel="shortcut icon" href="../assets/ico/favicon.png">
-	</head>
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<!-- Custom page CSS  -->
+    <link href="PageLayout.css" rel="stylesheet">
+</head>
 
-	<body>
-		<div class="navbar navbar-inverse navbar-fixed-top">
-			<div class="navbar-inner">
-				<div class="container-fluid">
-					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            			<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="brand" href="Advisor.jsp">Elmhurst Planner</a>
-					<div class="nav-collapse collapse">
-						<p class="navbar-text pull-right">
-							Logged in as <a href="userInfo.jsp" class="navbar-link">Username</a> | <a href="logout.jsp" class="navbar-link">Logout</a>
-						</p>
-						<ul class="nav">
-							<li class="active"><a href="Advisor.jsp">Advisor Dashboard</a></li>
-							<li><a href="#courseCatalog">Course Catalog</a></li>
-							<li><a href="#contact">Contact</a></li>
-						</ul>
-					</div><!--/.nav-collapse -->
-				</div>
-			</div>
-		</div>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
-		<div>
-			<div class="hero-unit">
-				<h1><em>Elmhurst Planner</em></h1>
-				<p>The fast and simple way to plan.</p>
-				<p><a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-			</div>
-		</div>
-		<div class="container-fluid">
-			<div class="row-fluid">
-				<div class="span10"></div>
-			</div>
-		</div>
-		<hr>
-	</body>
+      <a class="navbar-brand page-scroll" href="Dashboard.jsp"> <img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"> </a>
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-	<footer>
-		<p>&copy; Company 2013</p>
-	</footer>
+      <div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="Dashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Scheduler.jsp">Scheduler</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Catalog.jsp">Course Catalog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Contact.jsp">Contact</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+        	<li class="nav-item">
+          		<a class="nav-link disabled" href="#">Signed in as, userName</a>
+          	</li>
+        	<li class="nav-item">
+          		<a class="nav-link" href="Logout.jsp">Logout</a>
+          	</li>
+        </ul>
+      </div>
+    </nav>
 
-	<script src="../assets/js/jquery.js"></script>
-	<script src="../assets/js/bootstrap-transition.js"></script>
-	<script src="../assets/js/bootstrap-alert.js"></script>
-	<script src="../assets/js/bootstrap-modal.js"></script>
-	<script src="../assets/js/bootstrap-dropdown.js"></script>
-	<script src="../assets/js/bootstrap-scrollspy.js"></script>
-	<script src="../assets/js/bootstrap-tab.js"></script>
-	<script src="../assets/js/bootstrap-tooltip.js"></script>
-	<script src="../assets/js/bootstrap-popover.js"></script>
-	<script src="../assets/js/bootstrap-button.js"></script>
-	<script src="../assets/js/bootstrap-collapse.js"></script>
-	<script src="../assets/js/bootstrap-carousel.js"></script>
-	<script src="../assets/js/bootstrap-typeahead.js"></script>
-	<script type="text/javascript">
-		var acc = document.getElementsByClassName("accordion");
-		var i;
-		
-		for (i = 0; i < acc.length; i++) {
-			acc[i].onclick = function() {
-				this.classList.toggle("active");
-				var panel = this.nextElementSibling;
-				if (panel.style.display === "block")  { panel.style.display = "none";}
-				else { panel.style.display = "block"; }
-			}
-		}
+	<div class="container" style="padding-top:1%; overflow-x:auto;">
+		<div class="col-xs-12">
+			<table class="table table-bordered table-hover" data-link="row">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">eNumber</th>
+						<th scope="col">First</th>
+						<th scope="col">Last</th>
+						<th scope="col">Major</th>
+						<th scope="col">field</th>
+						<th scope="col">field</th>
+					</tr>
+				</thead>
+				<tbody >
+					<tr>
+						<th scope="col">e000000</th>
+						<th scope="col">Rotator Rotator Rotator</th>
+						<th scope="col">No lemon, no melon </th>
+						<th scope="col">Mathematics and the Foundations of Computer Science</th>
+						<th scope="col">field</th>
+						<th scope="col">field</th>
+					</tr>
+				</tbody>
+			</table>
+ 		</div>
+	</div> 
 
-		function autoOpen() {
-			document.getElementsById("defaultOpen").style.visibility = "block";
-		}
-	</script>
+
+	<footer class="container">
+      <p>© Company 2017-2018</p>
+    </footer>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="rowlink.js"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../../../assets/js/vendor/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    
+    <script type="text/javascript">
+    	var acc = document.getElementsByClassName("accordion");
+    	var i;
+
+    	for (i = 0; i < acc.length; i++) {
+      		acc[i].onclick = function() {
+      			this.classList.toggle("active");
+        		var panel = this.nextElementSibling;
+        		if (panel.style.display === "block")  { panel.style.display = "none";  }
+        		else                  { panel.style.display = "block"; }
+      		}
+    	}
+
+    	function autoOpen() {
+    	  document.getElementsById("defaultOpen").style.visibility = "block";
+    	}
+    </script>
+</body>
 </html>

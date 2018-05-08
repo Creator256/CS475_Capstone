@@ -10,6 +10,8 @@ public class User {
 	private String lastName;
 	private boolean loggedIn;
 	private int personType;
+	private Student student;
+	private Advisor advisor;
 
 	
 	public boolean Login() {
@@ -29,13 +31,14 @@ public class User {
 				lastName = rs.getString("LastName");
 				personType = rs.getInt("isStudent");
 				if(isStudent()) {
-					
+					student = new Student(eNumber, firstName + " " + lastName, dbbean);
+					//student.init(eNumber, firstName + " " + lastName, dbbean);
 				}
 				loggedIn = true;
 				return true;
 			}
 		}catch(Exception e) {
-			System.out.println("Could not make a connection or invalid query");
+			System.out.println(e);
 			return false;
 		}
 		return false;
@@ -78,5 +81,9 @@ public class User {
 	}
 	public void setLoggedIn(boolean status) {
 		loggedIn = status;
+	}
+	
+	public Student getStudent() {
+		return student;
 	}
 }

@@ -34,6 +34,9 @@ public class User {
 					student = new Student(eNumber, firstName + " " + lastName, dbbean);
 					//student.init(eNumber, firstName + " " + lastName, dbbean);
 				}
+				else {
+					advisor = new Advisor(eNumber, firstName, lastName, dbbean);
+				}
 				loggedIn = true;
 				return true;
 			}
@@ -85,5 +88,9 @@ public class User {
 	
 	public Student getStudent() {
 		return student;
+	}
+	
+	public Advisor getAdvisor() {
+		return advisor;
 	}
 }

@@ -1,4 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import ="java.util.*" %>
+<%@ page import ="final_project.Advisor" %>
+<!-- <%@ page import ="final_project.Advisor" %>  -->
+<jsp:useBean id = "currUsrBeanId" scope = "session" class = "final_project.User" >
+</jsp:useBean>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,6 +71,25 @@
 					</tr>
 				</thead>
 				<tbody >
+				<% Advisor currentAdvisor = currUsrBeanId.getAdvisor();
+				boolean success = currentAdvisor.getStudents();
+				if(success) {
+					Map<String, String[]> advisorsStudents = currentAdvisor.getStudentinfo();
+					
+					for (Map.Entry<String, String[]> entry : advisorsStudents.entrySet()) {
+					    out.println("<tr>");
+					    String key = entry.getKey();
+					    String[] values = entry.getValue(); %>
+					    <td> <%= key %>  </td> 
+					    <% for(int i = 0; i < values.length; i++) {
+					    System.out.println(key + ": " + values[i]); %>
+					    <td> <%= values[i] %>  </td> 
+					    <% } %>
+					    <td> 4  </td> 
+					    <td> 5  </td> 
+					    <% out.println("</tr>");
+					 }
+				} %>
 					<tr>
 						<th scope="col">e000000</th>
 						<th scope="col">Rotator Rotator Rotator</th>

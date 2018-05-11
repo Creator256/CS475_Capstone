@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ page import ="java.sql.*" %>
     <jsp:useBean id = "currUsrBeanId" scope = "session" class = "final_project.User" >
 	</jsp:useBean>
 <!DOCTYPE html>
@@ -40,11 +41,11 @@
 		<form action="ProcessLogin.jsp" >
 			<div  align="center">
 				<label style="desplay:inline-block; width:9%"><b>ENumbers</b></label>
-				<input type="text" placeholder="Your ENumber" name="user">
+				<input type="text" placeholder="Your ENumber" name="user" value="e0011111">
 			</div>
 			<div align="center">	
 				<label style="desplay:inline-block; width:9%; "><b>Password</b></label>
-				<input type="password" placeholder="Your Password" name="pass">
+				<input type="password" placeholder="Your Password" name="pass" value="123456">
 			</div>
 			<div align="center">
 				<input type="submit" value="Login" button type="button" class="btn btn-primary" style="background-color:#0c2340;"></button>

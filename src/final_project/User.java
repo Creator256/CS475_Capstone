@@ -13,6 +13,8 @@ public class User {
 	private Student student;
 	private Advisor advisor;
 	private DBBean dbbean;
+	
+	private String[] majorCourses;
 
 	
 	public boolean Login() {
@@ -89,6 +91,64 @@ public class User {
 	
 	public Student getStudent() {
 		return student;
+	}
+	
+	public String[] getMajors() {
+		String[] majors = new String[6];
+		try {
+			PreparedStatement ps = dbbean.getConnection().prepareStatement("select abbreviation from major");
+			ResultSet rs = ps.executeQuery();
+			int i = 0;
+			while(rs.next()) {
+				majors[i] = rs.getString(1);
+				i++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return majors;
+	}
+	
+	public String[] getMajorCourses(String majorAbb) {
+		try {
+			System.out.println(majorAbb);
+			PreparedStatement ps = dbbean.getConnection().prepareStatement("select required_course_ids from major where abbreviation = ?");
+			ps.setString(1, majorAbb);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				String classes = rs.getString(1);
+				System.out.println(classes);
+				if (classes != null && !classes.isEmpty()) {
+					majorCourses = classes.split(",");
+				} else {
+					String[] nullCourses = new String[1];
+					return nullCourses;
+				}
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return majorCourses;
+	}
+	
+	public String[] getCourses() {
+		String[] courses = new String[30];
+		try {
+			PreparedStatement ps = dbbean.getConnection().prepareStatement("select idcourse from course");
+			ResultSet rs = ps.executeQuery();
+			int i = 0;
+			while(rs.next()) {
+				courses[i] = rs.getString(1);
+				i++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return courses;
 	}
 	
 	public String[] getCourseInfo(String courseID) {

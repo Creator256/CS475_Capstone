@@ -12,6 +12,7 @@ public class User {
 	private int personType;
 	private Student student;
 	private Advisor advisor;
+	private DBBean dbbean;
 
 	
 	public boolean Login() {
@@ -19,7 +20,7 @@ public class User {
 		try {
 			System.out.println(eNumber);
 			System.out.println(password);
-			DBBean dbbean = new DBBean();
+			dbbean = new DBBean();
 			dbbean.InitConnection();
 			PreparedStatement ps = dbbean.getConnection().prepareStatement("select * from person where eNumber = ? and password = ?");
 			ps.setString(1, eNumber);
@@ -85,5 +86,29 @@ public class User {
 	
 	public Student getStudent() {
 		return student;
+	}
+	
+	public String[] getCourseInfo(String courseID) {
+		String[] courseInfo = new String[9];
+		try {
+			PreparedStatement ps = dbbean.getConnection().prepareStatement("select * from course where idcourse = ?");
+			ps.setString(1, courseID);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				courseInfo[0] = rs.getString(1);
+				courseInfo[1] = Integer.toString(rs.getInt(2));
+				courseInfo[2] = rs.getString(3);
+				courseInfo[3] = rs.getString(4);
+				courseInfo[4] = Double.toString(rs.getDouble(5));
+				courseInfo[5] = rs.getString(6);
+				courseInfo[6] = rs.getString(7);
+				courseInfo[7] = rs.getString(8);
+				courseInfo[8] = rs.getString(9);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return courseInfo;
 	}
 }

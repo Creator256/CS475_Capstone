@@ -44,7 +44,9 @@ public class Student {
 			}
 		} catch (Exception e) {
 
-		}		
+		}
+		
+		
 	}
 	
 	public String[] getYearOneClasses() {

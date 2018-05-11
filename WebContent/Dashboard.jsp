@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import = "java.sql.*" %>
+<%@ page import = "java.lang.Math" %>
+<%@ page import ="final_project.User" %>
+<%@ page import ="final_project.Student" %>
+<jsp:useBean id = "currUsrBeanId" scope = "session" class = "final_project.User" >
+</jsp:useBean>
 <!DOCTYPE html>
 <html lang="en"><head>
     <meta charset="utf-8">
@@ -13,219 +19,266 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 	<!-- Custom page CSS  -->
     <link href="PageLayout.css" rel="stylesheet">
+    <link href="sidebar.css" rel="stylesheet">
   </head>
 
   <body>
+	<%
+    	String studentName = currUsrBeanId.getName();
+    	String studentNumber = currUsrBeanId.getENumber();
+    	String studentAdvisor = "tempAdvisor";
+    	String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
+    	String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
+    	String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
+    	String[] studentFourthYear = currUsrBeanId.getStudent().getYearFourClasses();
+    	
+    	String[] courseInfoVar;
+  		String creditVar;
+  		String tagVar;
+  		String aokVar;
+    	
+  		String[] majors = currUsrBeanId.getMajors();
+  		String[] majorCourses;
+    %>
 
-   <nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
+	<nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
-      <a class="navbar-brand page-scroll" href="Dashboard.jsp"> <img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"> </a>
-      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+		<a class="navbar-brand page-scroll" href="Dashboard.jsp"><img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"></a>
+		<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-      <div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="Dashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Scheduler.jsp">Scheduler</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Catalog.jsp">Course Catalog</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Contact.jsp">Contact</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-        	<li class="nav-item">
-          		<a class="nav-link disabled" href="#">Signed in as, userName</a>
-          	</li>
-        	<li class="nav-item">
-          		<a class="nav-link" href="Logout.jsp">Logout</a>
-          	</li>
-        </ul>
-      </div>
-    </nav>
-
+		<div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="Dashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Scheduler.jsp">Scheduler</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Catalog.jsp">Course Catalog</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Contact.jsp">Contact</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link disabled" href="#">Signed in as, <% out.println(studentName); %></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Logout.jsp">Logout</a>
+				</li>
+			</ul>
+		</div>
+	</nav>    
+            
     <main role="main">
-      <div class="container">
+    
+	<div class="wrapper" style="margin-top: -40px;">
+      <div class="content" style="padding: 30px; width: 100%;">
+      
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="" id="">
+                   	<ul class="nav navbar-nav navbar-left">
+                   	<% 
+                   		out.println("<li>Student: " + studentName + "</li>");
+                   		out.println("<li>eNumber: " + studentNumber + "</li>");
+                   		out.println("<li>Advisor: " + studentAdvisor + "</li>");
+                   	%>
+                   	<!-- 
+                   	<li>Student: studentName</li>
+                   	<li>eNumber: studentNumber</li>
+                   	<li>Advisor: studentAdvisor</li>
+                   	 -->
+                   	
+                	</ul>
+            	</div>
+            	<div class="" id="">
+                   	<ul class="nav navbar-nav navbar-center">
+                        <li>Major: $StudentMajor</li>
+                        <li>Year: 1<br></li>
+                	</ul>
+            	</div>
+            	<div class="navbar-header pull-right">
+                 	<button type="button" id="sidebarCollapse" class="navbar-btn">
+                        <span></span>
+                        <span></span>
+                    	<span></span>
+                	</button>
+                </div>
+            	
+        	</div>
+      	</nav>
         <!-- Example row of columns -->
-        <div class="row">
-          <div class="col-md-4" style="wordwrap: break-word">
+        <div class="row" style="overflow-x: auto;">
+          <div class="col-md-4" style="min-width: 250px; wordwrap: break-word">
             <ul class="nav nav-list">
-                <li style="border: 5px solid black; padding: 10px; margin: 0px; width: 100%;">
-                  <h2>Current Courses</h2>
-                  <button class="accordion" id="CourseButton">CS435 Concepts</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                          <li>
-                            Tags: N/A
-                          </li>
-                          <li>
-                            AoKs: N/A
-                          </li>
-                      </ul>
-                    </div>
-                  <button class="accordion" id="CourseButton">CS475 Software</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                          <li>
-                            Tags: N/A
-                          </li>
-                          <li>
-                            AoKs: N/A
-                          </li>
-                      </ul>
-                    </div>
-                </li>
-                <li style="border: 5px solid black; padding: 10px; margin-top: 25px; width: 100%;">
-                  <h2>Upcoming Courses</h2>
-                  <button class="accordion" id="CourseButton">CS435 Concepts</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                        <li>
-                          Tags: N/A
-                        </li>
-                        <li>
-                          AoKs: N/A
-                        </li>
-                      </ul>
-                    </div>
-                  <button class="accordion" id="CourseButton">CS475 Software</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                        <li>
-                          Tags: N/A
-                        </li>
-                        <li>
-                          AoKs: N/A
-                        </li>
-                      </ul>
-                    </div>
+                <li id="DashboardPanel">
+                  <button class="accordion active" id="CourseButton"><h2>Current Courses</h2></button>
+                  <div class="panel" style="display: block;">
+                  	<%
+                  		for(int i=0; i < studentFirstYear.length; i++){
+                  			courseInfoVar = currUsrBeanId.getCourseInfo(studentFirstYear[i]);
+                  			creditVar = courseInfoVar[4];
+                  			aokVar = courseInfoVar[5];
+                  			tagVar = courseInfoVar[6];
+                  			
+                  			
+                  			out.println("<div class=\"CoursePanel\">");
+              					out.println(studentFirstYear[i]);
+              					out.println("<ul>");
+              						out.println("<li>Credits: " + creditVar + "</li>");
+              						out.println("<li>AoKs: " + aokVar + "</li>");
+              						out.println("<li>Tags: " + tagVar + "</li>");
+              					out.println("</ul>");
+              				out.println("</div>");	
+                  		}
+                  	%>
+                  </div>
                 </li>
               </ul>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4" style="min-width: 250px; wordwrap: break-word">
             <ul class="nav nav-list">
-                <li style="border: 5px solid black; padding: 10px; margin: 0px; width: 100%;">
-                  <h2>Remaining Requirements</h2>
-                  <button class="accordion" id="CourseButton">Major Requirements</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                        <li>
-                          To be generated using database...
-                        </li>
-                        <li>
-                          CS###
-                        </li>
-                        <li>
-                          MTH###
-                        </li>
-                      </ul>
-                    </div>
-                  <button class="accordion" id="CourseButton">Tag Requirements</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                          <li>
-                            To be generated using database...
-                          </li>
-                          <li>
-                            I Tag
-                          </li>
-                          <li>
-                            O Tag
-                          </li>
-                      </ul>
-                    </div>
-                  <button class="accordion" id="CourseButton">AoK Requirements</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                          <li>
-                            To be generated using database...
-                          </li>
-                          <li>
-                            IEJ
-                          </li>
-                          <li>
-                            RSC
-                          </li>
-                      </ul>
-                    </div>
-                  </li>
+                <li id="DashboardPanel">
+                	<button class="accordion active" id="CourseButton"><h2>Upcoming Courses</h2></button>
+                  		<div class="panel" style="display: block;">
+                  			<%
+                  				for(int i=0; i < studentSecondYear.length; i++){
+                  					courseInfoVar = currUsrBeanId.getCourseInfo(studentSecondYear[i]);
+                  					creditVar = courseInfoVar[4];
+                  					aokVar = courseInfoVar[5];
+                  					tagVar = courseInfoVar[6];
+                  			
+                  					out.println("<div class=\"CoursePanel\">");
+              							out.println(studentSecondYear[i]);
+              							out.println("<ul>");
+              								out.println("<li>Credits: " + creditVar + "</li>");
+              								out.println("<li>AoKs: " + aokVar + "</li>");
+              								out.println("<li>Tags: " + tagVar + "</li>");
+              							out.println("</ul>");
+              						out.println("</div>");	
+                  				}
+                  			%>
+                  		</div>
+                  	</li>
                 </ul>
-
           </div>
-          <div class="col-md-4">
-            <ul class="nav nav-list">
-                <li style="border: 5px solid black; padding: 10px; margin: 0px; width: 100%;">
-                  <h2>Course Catalog</h2>
-                  <form id="form_search" name="form_search" method="get" action="" class="form-inline">
-                    <div class="input-group">
-      					<input type="text" class="form-control" placeholder="Search Catalog...">
-      						<span class="input-group-btn">
-        						<button class="btn btn-secondary" type="button">Search</button>
-      						</span>
-    				</div>
-                  </form>
-                  <button class="accordion" id="CourseButton">CS Catalog</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                          <li>
-                            To be generated using database...
-                          </li>
-                          <li>
-                            CS###
-                          </li>
-                          <li>
-                            MTH###
-                          </li>
-                      </ul>
-                    </div>
-                  <button class="accordion" id="CourseButton">CGE Catalog</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                          <li>
-                            To be generated using database...
-                          </li>
-                          <li>
-                            CGE###
-                          </li>
-                          <li>
-                            MTH###
-                          </li>
-                      </ul>
-                    </div>
-                  <button class="accordion" id="CourseButton">IS Catalog</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                          <li>
-                            To be generated using database...
-                          </li>
-                          <li>
-                            IS###
-                          </li>
-                          <li>
-                            IS###
-                          </li>
-                      </ul>
+          <div class="col-md-4" style="min-width: 250px; wordwrap: break-word">
+          	<ul class="nav nav-list">
+                <li id="DashboardPanel">
+                  <button class="accordion active" id="CourseButton"><h2>Remaining Requirements</h2></button>
+                  	<div class="panel" style="display: block;">
+                 		<button class="accordion" id="CourseButton">Major Requirements</button>
+                    		<div class="panel">
+                      			<ul class="ClassList">
+                        			<li>To be generated...</li>
+                        			<li>CS###</li>
+                        			<li>MTH###</li>
+                      			</ul>
+                    		</div>
+                  		<button class="accordion" id="CourseButton">Tag Requirements</button>
+                    		<div class="panel">
+                      			<ul class="ClassList">
+                          			<li>To be generated...</li>
+                          			<li>I Tag</li>
+                          			<li>O Tag</li>
+                      			</ul>
+                    		</div>
+                  		<button class="accordion" id="CourseButton">AoK Requirements</button>
+                    		<div class="panel">
+                    			<ul class="ClassList">
+                          			<li>To be generated...</li>
+                          			<li>IEJ</li>
+                          			<li>RSC</li>
+                      			</ul>
+                    		</div>
                     </div>
                   </li>
-                </ul>
+           	</ul>
           </div>
         </div>
 
         <hr>
 
       </div> <!-- /container -->
-
+      <nav id="sidebar" class="">
+    	<div class="sidebar-header">
+    		<h3>Course Catalog</h3>
+        </div>
+        <ul class="list-unstyled components">
+        	<li style="padding: 10px;">
+        		<form id="form_search" name="form_search" method="get" action="" class="form-inline">
+              		<div class="input-group">
+      					<input type="text" class="form-control" placeholder="Search Catalog...">
+      					<span class="input-group-btn">
+        					<button class="btn btn-secondary" type="button" style="background: #154073;">Search</button>
+      					</span>
+    				</div>
+           		</form>
+        	</li>
+        
+        	<%
+        		
+        		for(int x=0; x < majors.length; x++) {
+        			majorCourses = currUsrBeanId.getMajorCourses(majors[x]);
+        			if(majorCourses[0] != null && !majorCourses[0].isEmpty()){
+        				out.println("<li class=\"\">");
+        					out.println("<a href=\"#" + majors[x] + "Submenu\" data-toggle=\"collapse\" aria-expanded=\"false\" class=\"collapsed\">" + majors[x] + " Major</a>");
+        					out.println("<ul class=\"list-unstyled collapse\" id=\"" + majors[x] + "Submenu\" aria-expanded=\"false\" style=\"height: 0px;\">");
+        						for(int y=0; y < majorCourses.length; y++){
+        							out.println("<li><a href=\"#\">" + majorCourses[y] + "</a></li>");
+        						}
+        					out.println("</ul>");
+        				out.println("</li>");	
+        			}
+        		}
+        	%>
+        	
+            <li>
+                <a href="#CGESubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">CGE Courses</a>
+                	<ul class="list-unstyled collapse" id="CGESubmenu" aria-expanded="false" style="height: 0px;">
+                		<li><a href="#">Example 1</a></li>
+                        <li><a href="#">Example 2</a></li>
+                        <li><a href="#">Example 3</a></li>
+                    </ul>
+            </li>
+           	<li>
+           		<a href="#IGSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">IG Courses</a>
+                	<ul class="list-unstyled collapse" id="IGSubmenu" aria-expanded="false" style="height: 0px;">
+                		<li><a href="#">Example 1</a></li>
+                        <li><a href="#">Example 2</a></li>
+                        <li><a href="#">Example 3</a></li>
+                    </ul>
+            </li>
+            <li>
+            	<a href="#MTHSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">MTH Courses</a>
+                	<ul class="list-unstyled collapse" id="MTHSubmenu" aria-expanded="false" style="height: 0px;">
+                		<li><a href="#">Example 1</a></li>
+                        <li><a href="#">Example 2</a></li>
+                        <li><a href="#">Example 3</a></li>
+                    </ul>
+            </li>
+            <li>
+            	<a href="#ENGSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">ENG Courses</a>
+                	<ul class="list-unstyled collapse" id="ENGSubmenu" aria-expanded="false" style="height: 0px;">
+                		<li><a href="#">Example 1</a></li>
+                        <li><a href="#">Example 2</a></li>
+                        <li><a href="#">Example 3</a></li>
+                    </ul>
+            </li>
+      	</ul>
+      	
+      	<ul class="list-unstyled CTAs">
+        	<li><a href="#" class="download">Download source</a></li>
+        	<li><a href="#" class="article">Back to article</a></li>
+       	</ul>
+	</nav>
+    </div>  
     </main>
-
-    <footer class="container">
-      <p>© Company 2017-2018</p>
-    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -250,7 +303,13 @@
     	function autoOpen() {
     	  document.getElementsById("defaultOpen").style.visibility = "block";
     	}
+    	
+    	$(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
     </script>
-
 </body>
 </html>

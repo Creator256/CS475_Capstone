@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import = "java.sql.*" %>
+<%@ page import = "java.lang.Math" %>
+<%@ page import ="final_project.User" %>
+<%@ page import ="final_project.Student" %>
+<jsp:useBean id = "currUsrBeanId" scope = "session" class = "final_project.User" >
+</jsp:useBean>
 <!DOCTYPE html>
 <html lang="en"><head>
     <meta charset="utf-8">
@@ -14,138 +20,217 @@
 	<!-- Custom page CSS  -->
     <link href="PageLayout.css" rel="stylesheet">
     <link href="Scheduler.css" rel="stylesheet">
-    <style>
-#div1, #div2 {
-    float: left;
-    width: 100px;
-    height: 35px;
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid black;
-}
-</style>
+    <link href="sidebar.css" rel="stylesheet">
   </head>
 
   <body>
-
+	<%
+    	String studentName = currUsrBeanId.getName();
+    	String studentNumber = currUsrBeanId.getENumber();
+    	String studentAdvisor = "tempAdvisor";
+    	String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
+    	String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
+    	String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
+    	String[] studentFourthYear = currUsrBeanId.getStudent().getYearFourClasses();
+    	
+    	String[] courseInfoVar;
+  		String creditVar;
+  		String tagVar;
+  		String aokVar;
+    	
+  		String[] majors = currUsrBeanId.getMajors();
+  		String[] majorCourses;
+    %>
     <nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
-      <a class="navbar-brand page-scroll" href="Dashboard.jsp"> <img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"> </a>
-      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+		<a class="navbar-brand page-scroll" href="Dashboard.jsp"><img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"></a>
+		<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-      <div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="Dashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Scheduler.jsp">Scheduler</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Catalog.jsp">Course Catalog</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Contact.jsp">Contact</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-        	<li class="nav-item">
-          		<a class="nav-link disabled" href="#">Signed in as, userName</a>
-          	</li>
-        	<li class="nav-item">
-          		<a class="nav-link" href="Logout.jsp">Logout</a>
-          	</li>
-        </ul>
-      </div>
-    </nav>
+		<div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="Dashboard.jsp">Dashboard</a>
+				</li>
+				<li class="nav-item active">
+					<a class="nav-link" href="Scheduler.jsp">Scheduler<span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Catalog.jsp">Course Catalog</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Contact.jsp">Contact</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link disabled" href="#">Signed in as, <% out.println(studentName); %></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Logout.jsp">Logout</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 
+	<!-- Create form to encompass scheduler, then create sections Year 1, Year 2, etc..
+			YearInfo: CourseName CourseName .. (coursenames seperated by spaces)
+			each year will be its own string.		
+	 -->
     <main role="main">
-
-      <div class="container" style="padding-top: 50px;">
+	<div class="wrapper" style="margin-top: -40px;">
+      <div class="content" style="padding: 30px; width: 100%;">
+      
+      	<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="" id="">
+                   	<ul class="nav navbar-nav navbar-left">
+                        <li>Student: $StudentName</li>
+                        <li>eNumber: $StudentNumber</li>
+                        <li>Advisor: $StudentAdvisor</li>
+                	</ul>
+            	</div>
+            	<div class="" id="">
+                   	<ul class="nav navbar-nav navbar-center">
+                        <li>Major: $StudentMajor</li>
+                        <li>Year: $StudentYear<br></li>
+                	</ul>
+            	</div>
+            	<div class="navbar-header pull-right">
+                 	<button type="button" id="sidebarCollapse" class="navbar-btn">
+                        <span></span>
+                        <span></span>
+                    	<span></span>
+                	</button>
+                </div>
+            	
+        	</div>
+      	</nav>
         <!-- Container for Scheduler -->
-        <h1><em>My Scheduler</em></h1>
+        
         <div class="row">
         	<div class="col-md-9">
         		Area for schedule/plan
         		<div class="row">
             		<div class="col-md-6">
             			First Year Courses
-            			<div id="courseCell" ondrop="drop(event)" ondragover="allowDrop(event)">
+            			<div class="courseCell" id="firstYear" ondrop="drop(event)" ondragover="allowDrop(event)">
             				Drag Course Here...
             			</div>
             		</div>
             		<div class="col-md-6">
             			Second Year Courses
+            			<div class="courseCell" id="secondYear" ondrop="drop(event)" ondragover="allowDrop(event)">
+            				Drag Course Here...
+            			</div>
             		</div>
           		</div>
         	</div>
-        	<div class="col-md-3">Area for course catalog
+        	<div class="col-md-3">
+        		Planned Schedule
+        		<ul class="">
+                  <li>Credits: #.##</li>
+                  <li>Tags: I, O, etc..</li>
+                  <li>AoKs: IEJ, etc..</li>
+                </ul>
+        		Remaining Requirements
+        		<ul class="">
+                  <li>Credits: #.##</li>
+                  <li>Tags: I, O, etc..</li>
+                  <li>AoKs: IEJ, etc..</li>
+                </ul>
         		<ul class="nav nav-list">
-                <li style="background-color: white; border: 5px solid black; padding: 10px; margin: 0px; width: 100%;">
-                  <h2>Course Catalog</h2>
-                  <form id="form_search" name="form_search" method="get" action="" class="form-inline">
-                    <div class="input-group">
-      					<input type="text" class="form-control" placeholder="Search Catalog...">
-      						<span class="input-group-btn">
-        						<button class="btn btn-secondary" type="button">Search</button>
-      						</span>
-    				</div>
-                  </form>
-                  <button class="accordion" id="CourseButton">CS Catalog</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                          <li>
-                            To be generated using database...
-                          </li>
-                          <li>
-                            CS###
-                          </li>
-                          <li>
-                            MTH###
-                          </li>
-                      </ul>
-                    </div>
-                  <button class="accordion" id="CourseButton">CGE Catalog</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                          <li>
-                            To be generated using database...
-                          </li>
-                          <li>
-                            CGE###
-                          </li>
-                          <li>
-                            MTH###
-                          </li>
-                      </ul>
-                    </div>
-                  <button class="accordion" id="CourseButton">IS Catalog</button>
-                    <div class="panel">
-                      <ul class="ClassList">
-                          <li>
-                            To be generated using database...
-                          </li>
-                          <li>
-                            IS###
-                          </li>
-                          <li>
-                            IS###
-                          </li>
-                      </ul>
-                    </div>
-                  </li>
                   <li>
                   	<div id="drag2" draggable="true" draggable="true" ondragstart="drag(event)" width="336" height="69">
                   		Draggable Course
+                  	</div>
+                  	<div class="CoursePanel" id="drag3" draggable="true" draggable="true" ondragstart="drag(event)">
+                  		CS475 Software
+                  		<ul>
+                  			<li>Credits: 1.00</li>
+                  			<li>Tags: N/A</li>
+                  			<li>AoKs: N/A</li>
+                  		</ul>
                   	</div>
                   </li>
                 </ul>
         	</div>
       	</div>
+      	
       </div> <!-- /container -->
-
+      <nav id="sidebar" class="">
+    	<div class="sidebar-header">
+    		<h3>Course Catalog</h3>
+        </div>
+        <ul class="list-unstyled components">
+        	<li style="padding: 10px;">
+        		<form id="form_search" name="form_search" method="get" action="" class="form-inline">
+              		<div class="input-group">
+      					<input type="text" class="form-control" placeholder="Search Catalog...">
+      					<span class="input-group-btn">
+        					<button class="btn btn-secondary" type="button" style="background: #154073;">Search</button>
+      					</span>
+    				</div>
+           		</form>
+        	</li>
+        
+        	<%
+        		
+        		for(int x=0; x < majors.length; x++) {
+        			majorCourses = currUsrBeanId.getMajorCourses(majors[x]);
+        			if(majorCourses[0] != null && !majorCourses[0].isEmpty()){
+        				out.println("<li class=\"\">");
+        					out.println("<a href=\"#" + majors[x] + "Submenu\" data-toggle=\"collapse\" aria-expanded=\"false\" class=\"collapsed\">" + majors[x] + " Major</a>");
+        					out.println("<ul class=\"list-unstyled collapse\" id=\"" + majors[x] + "Submenu\" aria-expanded=\"false\" style=\"height: 0px;\">");
+        						for(int y=0; y < majorCourses.length; y++){
+        							out.println("<li><a href=\"#\">" + majorCourses[y] + "</a></li>");
+        						}
+        					out.println("</ul>");
+        				out.println("</li>");	
+        			}
+        		}
+        	%>
+            <li>
+                <a href="#CGESubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">CGE Courses</a>
+                	<ul class="list-unstyled collapse" id="CGESubmenu" aria-expanded="false" style="height: 0px;">
+                		<li><a href="#">Page 1</a></li>
+                        <li><a href="#">Page 2</a></li>
+                        <li><a href="#">Page 3</a></li>
+                    </ul>
+            </li>
+           	<li>
+           		<a href="#IGSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">IG Courses</a>
+                	<ul class="list-unstyled collapse" id="IGSubmenu" aria-expanded="false" style="height: 0px;">
+                		<li><a href="#">Page 1</a></li>
+                        <li><a href="#">Page 2</a></li>
+                        <li><a href="#">Page 3</a></li>
+                    </ul>
+            </li>
+            <li>
+            	<a href="#MTHSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">MTH Courses</a>
+                	<ul class="list-unstyled collapse" id="MTHSubmenu" aria-expanded="false" style="height: 0px;">
+                		<li><a href="#">Page 1</a></li>
+                        <li><a href="#">Page 2</a></li>
+                        <li><a href="#">Page 3</a></li>
+                    </ul>
+            </li>
+            <li>
+            	<a href="#ENGSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">ENG Courses</a>
+                	<ul class="list-unstyled collapse" id="ENGSubmenu" aria-expanded="false" style="height: 0px;">
+                		<li><a href="#">Page 1</a></li>
+                        <li><a href="#">Page 2</a></li>
+                        <li><a href="#">Page 3</a></li>
+                    </ul>
+            </li>
+      	</ul>
+      	
+      	<ul class="list-unstyled CTAs">
+        	<li><a href="#" class="download">Download source</a></li>
+        	<li><a href="#" class="article">Back to article</a></li>
+       	</ul>
+	</nav>
+    </div>  
     </main>
 
     <footer class="container">
@@ -190,6 +275,13 @@
     		var data = ev.dataTransfer.getData("text");
     		ev.target.appendChild(document.getElementById(data));
 		}
+		
+		$(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
     </script>
 
 </body>

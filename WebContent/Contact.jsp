@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import = "java.sql.*" %>
+<%@ page import = "java.lang.Math" %>
+<%@ page import ="final_project.User" %>
+<%@ page import ="final_project.Student" %>
+<jsp:useBean id = "currUsrBeanId" scope = "session" class = "final_project.User" >
+</jsp:useBean>
 <!DOCTYPE html>
 <html lang="en"><head>
     <meta charset="utf-8">
@@ -16,43 +22,42 @@
   </head>
 
   <body>
-
+  	<% String studentName = currUsrBeanId.getName(); %>
     <nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
-      <a class="navbar-brand page-scroll" href="Dashboard.jsp"> <img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"> </a>
-      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+		<a class="navbar-brand page-scroll" href="Dashboard.jsp"><img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"></a>
+		<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-      <div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="Dashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Scheduler.jsp">Scheduler</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Catalog.jsp">Course Catalog</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Contact.jsp">Contact</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-        	<li class="nav-item">
-          		<a class="nav-link disabled" href="#">Signed in as, userName</a>
-          	</li>
-        	<li class="nav-item">
-          		<a class="nav-link" href="Logout.jsp">Logout</a>
-          	</li>
-        </ul>
-      </div>
-    </nav>
+		<div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="Dashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Scheduler.jsp">Scheduler</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Catalog.jsp">Course Catalog</a>
+				</li>
+				<li class="nav-item active">
+					<a class="nav-link" href="Contact.jsp">Contact</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link disabled" href="#">Signed in as, <% out.println(studentName); %></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Logout.jsp">Logout</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 
     <main role="main">
-
-      <div class="container" style="padding-top: 75px;">
+      <div class="container">
         <!-- Container for Scheduler -->
         <div class="row">
         	<div class="col-12-md">
@@ -88,7 +93,7 @@
         						<h3><em>Front-end Developers</em></h3>
         						<h3><em>Yeong-Haw Wang</em></h3>
         						<p>
-        							An Elmhurst College student going for his undergraduate in computer science. 
+        						Young Money, enough said... (Yeong you gotta fill your part out too)
         						</p>
         					</div>
         					<div style="overflow: auto; margin: 5px;">

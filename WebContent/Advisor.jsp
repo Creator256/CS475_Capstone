@@ -48,7 +48,8 @@
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link disabled" href="#">Signed in as, userName</a>
+					<a class="nav-link disabled" href="#">Signed in as
+					<%=currUsrBeanId.getName() %></a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="Logout.jsp">Logout</a>
@@ -63,11 +64,9 @@
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col">eNumber</th>
-						<th scope="col">First</th>
-						<th scope="col">Last</th>
+						<th scope="col">First Name</th>
+						<th scope="col">Last Name</th>
 						<th scope="col">Major</th>
-						<th scope="col">field</th>
-						<th scope="col">field</th>
 					</tr>
 				</thead>
 				<tbody >
@@ -82,22 +81,18 @@
 					    String[] values = entry.getValue(); %>
 					    <td> <%= key %>  </td> 
 					    <% for(int i = 0; i < values.length; i++) {
-					    System.out.println(key + ": " + values[i]); %>
+					    //System.out.println(key + ": " + values[i]); %>
 					    <td> <%= values[i] %>  </td> 
-					    <% } %>
-					    <td> 4  </td> 
-					    <td> 5  </td> 
-					    <% out.println("</tr>");
+					    <% } 
+					    out.println("</tr>");
 					 }
 				} %>
-					<tr>
+<!-- 					<tr>
 						<th scope="col">e000000</th>
 						<th scope="col">Rotator Rotator Rotator</th>
 						<th scope="col">No lemon, no melon </th>
 						<th scope="col">Mathematics and the Foundations of Computer Science</th>
-						<th scope="col">field</th>
-						<th scope="col">field</th>
-					</tr>
+					</tr> -->
 				</tbody>
 			</table>
  		</div>

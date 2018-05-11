@@ -89,7 +89,7 @@ public class Advisor {
 				String[] studentENumber = adviseeList.split(", ");
 
 				for (String studentstr : studentENumber) {
-					System.out.print(studentstr + ",, ");
+					//System.out.print(studentstr + ",, ");
 					boolean stat2;
 					PreparedStatement ps2 = dbbean.getConnection().prepareStatement(
 							"select firstName, lastName, major.fullname from person, student join major on student.idMajor = major.idMajor where person.eNumber = ? && student.eNumberStudent = person.eNumber");
@@ -99,14 +99,14 @@ public class Advisor {
 					if (stat2) {
 						
 						String temp[] = new String[3];
-						temp[0] = rs2.getString(1);
-						temp[1] = rs2.getString(2);
-						temp[2] = rs2.getString(3);
+						temp[0] = rs2.getString("firstName");
+						temp[1] = rs2.getString("lastName");
+						temp[2] = rs2.getString("major.fullname");
 
 						//System.out.println(temp);
 						studentinfo.put(studentstr, temp);
 					} else {
-						System.out.println("Error!");
+						System.out.println("Reached end of results in Result Set.");
 					}
 					rs2.close();
 					ps2.close();

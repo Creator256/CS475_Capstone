@@ -74,14 +74,14 @@
         			<h2><em>Developers</em></h2>
         			<div class="contactContainer">
         				<div class="contactInner">
-        					<img src="images/Portrait_Placeholder.png" width="150" height="150" id="placeholder" alt="Placeholder" style="float: right;">
+        					<img src="images/andrew.png" width="150" height="150" id="placeholder" alt="Placeholder" style="float: right;">
         					<h3><em>Project Lead -- Andrew Dufour</em></h3>
         					<p>
         					You ever need anything done? You call Tony, got it?? (Andrew fill something out so I don't have to...)
         					</p>
         				</div>
         				<div class="contactInner">
-        					<img src="images/Portrait_Placeholder.png" width="150" height="150" id="placeholder" alt="Placeholder" style="float: right;">
+        					<img src="images/matt.png" width="150" height="150" id="placeholder" alt="Placeholder" style="float: right;">
         					<h3><em>Database Developer -- Matthew Weiss</em></h3>
         					<p>
         					Have you ever tried to use inheritance in SQL? I hope not... that sounds awful (Matt fill this out please)
@@ -89,15 +89,15 @@
         				</div>
         				<div class="contactInner">
         					<div style="overflow: auto; margin: 5px;">
-        						<img src="images/Portrait_Placeholder.png" width="150" height="150" id="placeholder" alt="Placeholder" style="float: right;">
+        						<img src="images/yeong.png" width="150" height="150" id="placeholder" alt="Placeholder" style="float: right;">
         						<h3><em>Front-end Developers</em></h3>
         						<h3><em>Yeong-Haw Wang</em></h3>
         						<p>
-        						Young Money, enough said... (Yeong you gotta fill your part out too)
+        						Young Money, Computer Science student at Elmhurst college.
         						</p>
         					</div>
         					<div style="overflow: auto; margin: 5px;">
-        						<img src="images/Portrait_Placeholder.png" width="150" height="150" id="placeholder" alt="Placeholder" style="float: right;">
+        						<img src="images/eric.png" width="150" height="150" id="placeholder" alt="Placeholder" style="float: right;">
         						<h3><em>Eric Henricks</em></h3>
         						<p>
         						I'm supposed to write something here... but i'll do that later...

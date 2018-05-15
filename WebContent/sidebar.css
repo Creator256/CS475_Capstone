@@ -93,11 +93,31 @@ a, a:hover, a:focus {
     background: #fff;
 }
 
+#sidebar ul li span div {
+	background: #154073;
+	margin: 0px;
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+    border: 					0px solid rgb(12, 35, 64);
+	border-radius:				0px 0px 0px 0px;
+	width: 						100%;
+	min-width:					150px;
+	transition: all 0.3s;
+}
+#sidebar ul li span div:hover {
+    color: #0c2340;
+    background: #fff;
+    transition: all 0.3s;
+}
+#sidebar ul li span div ul{
+    display: none;
+}
+
 #sidebar ul li.active > a, a[aria-expanded="true"] {
     color: #fff;
     background: #154073;
 }
-
 
 a[data-toggle="collapse"] {
     position: relative;

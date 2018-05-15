@@ -18,10 +18,13 @@ public class User {
 	
 	private String[] majorCourses;
 	private String[][] allCourseInfo;
+
 	
 	public boolean Login() {
 		boolean stat = false;
 		try {
+			System.out.println(eNumber);
+			System.out.println(password);
 			dbbean = new DBBean();
 			dbbean.InitConnection();
 			PreparedStatement ps = dbbean.getConnection().prepareStatement("select * from person where eNumber = ? and password = ?");
@@ -34,7 +37,7 @@ public class User {
 				lastName = rs.getString("LastName");
 				personType = rs.getInt("isStudent");
 				if(isStudent()) {
-					createStudent(eNumber, firstName, lastName);
+					student = new Student(eNumber, firstName, lastName, dbbean);
 					//student.init(eNumber, firstName + " " + lastName, dbbean);
 				}
 				else {
@@ -71,6 +74,11 @@ public class User {
 	}
 	public String getName() {
 		return firstName + " " + lastName;
+	}
+	
+	public void setSchedule(String schedule) {
+		System.out.println("inside setSchedule!!!");
+		//set the user's schedule in the Database
 	}
 	
 	public boolean isStudent() {
@@ -186,7 +194,41 @@ public class User {
 
 		return courseInfo;
 	}
-
+	
+	public double getRemainingCredits(String remainingCourses, String majorID) {
+		double credits = 0;
+		String neededCredits;
+		String[] splitCourses;
+		String[] currentCourseInfo;
+		try {
+			PreparedStatement ps = dbbean.getConnection().prepareStatement("select graduationcredits from graduationrequirement where idgradrequirement = ?");
+			ps.setString(1, majorID);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				neededCredits = rs.getString(1);
+				if(Double.parseDouble(neededCredits) != 0) {
+					credits = credits + Double.parseDouble(neededCredits);
+				}
+				splitCourses = remainingCourses.split(",");
+				for(int x = 0; x < splitCourses.length; x++) {
+					currentCourseInfo = getCourseInfo(splitCourses[x]);
+					if(currentCourseInfo[4] != null && !currentCourseInfo[4].isEmpty()) {
+						if(Double.parseDouble(currentCourseInfo[4]) != 0) {
+							credits = credits - Double.parseDouble(currentCourseInfo[4]);
+						}
+					}
+				}
+				if(credits < 0) {
+					credits = 0;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return credits;
+	}
+	
 	public String[][] getAllCourses() {
 		if(allCourseInfo != null) return allCourseInfo;
 		allCourseInfo = null; // = new String[][];

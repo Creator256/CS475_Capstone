@@ -31,6 +31,11 @@
     	String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
     	String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
     	String[] studentFourthYear = currUsrBeanId.getStudent().getYearFourClasses();
+    	String studentMajorID = currUsrBeanId.getStudent().getMajorID();
+    	String studentMajor = currUsrBeanId.getStudent().getMajor();
+    	String studentRemainingCourses = currUsrBeanId.getStudent().getRemainingCourses();
+    	double studentRemainingCredits = currUsrBeanId.getRemainingCredits(studentRemainingCourses, studentMajorID);
+    	String[] studentRemainingFields = currUsrBeanId.getStudent().getRemainingGeneralFields();
     	
     	String[] courseInfoVar;
   		String creditVar;
@@ -98,7 +103,9 @@
             	</div>
             	<div class="" id="">
                    	<ul class="nav navbar-nav navbar-center">
-                        <li>Major: $StudentMajor</li>
+                   	<% 
+                   		out.println("<li>Major: " + studentMajor + "</li>");
+                   	%>
                         <li>Year: 1<br></li>
                 	</ul>
             	</div>
@@ -175,25 +182,25 @@
                  		<button class="accordion" id="CourseButton">Major Requirements</button>
                     		<div class="panel">
                       			<ul class="ClassList">
-                        			<li>To be generated...</li>
-                        			<li>CS###</li>
-                        			<li>MTH###</li>
+                      			<%
+                      				String[] remainingCourses;
+                          			remainingCourses = studentRemainingCourses.split(",");
+                  					for(int i=0; i < remainingCourses.length; i++){
+              							out.println("<li>" + remainingCourses[i] + "</li>");
+                  					}
+                  				%>
                       			</ul>
                     		</div>
-                  		<button class="accordion" id="CourseButton">Tag Requirements</button>
+                  		<button class="accordion" id="CourseButton">General Requirements</button>
                     		<div class="panel">
                       			<ul class="ClassList">
-                          			<li>To be generated...</li>
-                          			<li>I Tag</li>
-                          			<li>O Tag</li>
-                      			</ul>
-                    		</div>
-                  		<button class="accordion" id="CourseButton">AoK Requirements</button>
-                    		<div class="panel">
-                    			<ul class="ClassList">
-                          			<li>To be generated...</li>
-                          			<li>IEJ</li>
-                          			<li>RSC</li>
+                      				<%
+                      					out.println("<strong><u>Remaining Credits:</u></strong> " + studentRemainingCredits + "<br>");
+                      					out.println("<strong><u>Remaining Fields:</u></strong>");
+                  						for(int i=0; i < studentRemainingFields.length; i++){
+              								out.println("<li> " + studentRemainingFields[i] + "</li>");
+                  						}
+                  					%>
                       			</ul>
                     		</div>
                     </div>

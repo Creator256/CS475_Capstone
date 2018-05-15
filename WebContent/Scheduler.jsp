@@ -2,6 +2,8 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "java.lang.Math" %>
+<%@ page import ="java.net.*" %>
+<%@ page import ="java.io.*" %>
 <%@ page import ="final_project.User" %>
 <%@ page import ="final_project.Student" %>
 <jsp:useBean id = "currUsrBeanId" scope = "session" class = "final_project.User" >
@@ -25,21 +27,26 @@
 
   <body>
 	<%
-    	String studentName = currUsrBeanId.getName();
-    	String studentNumber = currUsrBeanId.getENumber();
-    	String studentAdvisor = "tempAdvisor";
-    	String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
-    	String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
-    	String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
-    	String[] studentFourthYear = currUsrBeanId.getStudent().getYearFourClasses();
-    	
-    	String[] courseInfoVar;
-  		String creditVar;
-  		String tagVar;
-  		String aokVar;
-    	
-  		String[] majors = currUsrBeanId.getMajors();
-  		String[] majorCourses;
+		String studentName = currUsrBeanId.getName();
+		String studentNumber = currUsrBeanId.getENumber();
+		String studentAdvisor = "tempAdvisor";
+		String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
+		String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
+		String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
+		String[] studentFourthYear = currUsrBeanId.getStudent().getYearFourClasses();
+		String studentMajorID = currUsrBeanId.getStudent().getMajorID();
+		String studentMajor = currUsrBeanId.getStudent().getMajor();
+		String studentRemainingCourses = currUsrBeanId.getStudent().getRemainingCourses();
+		double studentRemainingCredits = currUsrBeanId.getRemainingCredits(studentRemainingCourses, studentMajorID);
+		String[] studentRemainingFields = currUsrBeanId.getStudent().getRemainingGeneralFields();
+	
+		String[] courseInfoVar;
+		String creditVar;
+		String tagVar;
+		String aokVar;
+	
+		String[] majors = currUsrBeanId.getMajors();
+		String[] majorCourses;
     %>
     <nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
@@ -86,15 +93,19 @@
 			<div class="container-fluid">
 				<div class="" id="">
                    	<ul class="nav navbar-nav navbar-left">
-                        <li>Student: $StudentName</li>
-                        <li>eNumber: $StudentNumber</li>
-                        <li>Advisor: $StudentAdvisor</li>
+                        <% 
+                   			out.println("<li>Student: " + studentName + "</li>");
+                   			out.println("<li>eNumber: " + studentNumber + "</li>");
+                   			out.println("<li>Advisor: " + studentAdvisor + "</li>");
+                   		%>
                 	</ul>
             	</div>
             	<div class="" id="">
                    	<ul class="nav navbar-nav navbar-center">
-                        <li>Major: $StudentMajor</li>
-                        <li>Year: $StudentYear<br></li>
+                        <% 
+                   			out.println("<li>Major: " + studentMajor + "</li>");
+                   		%>
+                        <li>Year: 1<br></li>
                 	</ul>
             	</div>
             	<div class="navbar-header pull-right">
@@ -108,55 +119,135 @@
         	</div>
       	</nav>
         <!-- Container for Scheduler -->
-        
+        <form id="form_scheduler" name="form_scheduler" onsubmit="saveSchedule(event)" action="ProcessScheduler.jsp">
+        <input form="form_scheduler" type="hidden" name="scheduleFormString" id="scheduleFormString" value="">
         <div class="row">
-        	<div class="col-md-9">
+        	<div class="col-md-9" style="overflow-x: scroll; white-space: nowrap;">
         		Area for schedule/plan
         		<div class="row">
-            		<div class="col-md-6">
+            		<div class="col-md-6" style="min-width: 300px;">
             			First Year Courses
-            			<div class="courseCell" id="firstYear" ondrop="drop(event)" ondragover="allowDrop(event)">
+            			<div class="courseCell" id="firstYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
+            				<%
+                  				for(int i=0; i < studentFirstYear.length; i++){
+                  					courseInfoVar = currUsrBeanId.getCourseInfo(studentFirstYear[i]);
+                  					creditVar = courseInfoVar[4];
+                  					aokVar = courseInfoVar[5];
+                  					tagVar = courseInfoVar[6];
+                  			
+                  			
+                  					out.println("<div class=\"CoursePanel\" id=\"" + studentFirstYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\">");
+                  						//out.println("<input form=\"form_scheduler\" type=\"hidden\" name=\"" + studentFirstYear[i] + "\" value=\"" + studentFirstYear[i] + "\">");
+                  						out.println(studentFirstYear[i]);
+              							out.println("<ul>");
+              								out.println("<li>Credits: " + creditVar + "</li>");
+              								out.println("<li>AoKs: " + aokVar + "</li>");
+              								out.println("<li>Tags: " + tagVar + "</li>");
+              							out.println("</ul>");
+              						out.println("</div>");	
+                  				}
+                  			%>
             			</div>
             		</div>
-            		<div class="col-md-6">
+            		<div class="col-md-6" style="min-width: 300px;">
             			Second Year Courses
-            			<div class="courseCell" id="secondYear" ondrop="drop(event)" ondragover="allowDrop(event)">
+            			<div class="courseCell" id="secondYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
+            				<%
+                  				for(int i=0; i < studentSecondYear.length; i++){
+                  					courseInfoVar = currUsrBeanId.getCourseInfo(studentSecondYear[i]);
+                  					creditVar = courseInfoVar[4];
+                  					aokVar = courseInfoVar[5];
+                  					tagVar = courseInfoVar[6];
+                  			
+                  			
+                  					out.println("<div class=\"CoursePanel\" id=\"" + studentSecondYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\">");
+                  						//out.println("<input form=\"form_scheduler\" type=\"hidden\" name=\"" + studentSecondYear[i] + "\" value=\"" + studentSecondYear[i] + "\">");
+                  						out.println(studentSecondYear[i]);
+              							out.println("<ul>");
+              								out.println("<li>Credits: " + creditVar + "</li>");
+              								out.println("<li>AoKs: " + aokVar + "</li>");
+              								out.println("<li>Tags: " + tagVar + "</li>");
+              							out.println("</ul>");
+              						out.println("</div>");	
+                  				}
+                  			%>
+            			</div>
+            		</div>
+            		<div class="col-md-6" style="min-width: 300px;">
+            			Third Year Courses
+            			<div class="courseCell" id="thirdYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+            				Drag Course Here...
+            				<%
+                  				for(int i=0; i < studentThirdYear.length; i++){
+                  					courseInfoVar = currUsrBeanId.getCourseInfo(studentThirdYear[i]);
+                  					creditVar = courseInfoVar[4];
+                  					aokVar = courseInfoVar[5];
+                  					tagVar = courseInfoVar[6];
+                  			
+                  			
+                  					out.println("<div class=\"CoursePanel\" id=\"" + studentThirdYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\">");
+                  						//out.println("<input form=\"form_scheduler\" type=\"hidden\" name=\"" + studentThirdYear[i] + "\" value=\"" + studentThirdYear[i] + "\">");
+                  						out.println(studentThirdYear[i]);
+              							out.println("<ul>");
+              								out.println("<li>Credits: " + creditVar + "</li>");
+              								out.println("<li>AoKs: " + aokVar + "</li>");
+              								out.println("<li>Tags: " + tagVar + "</li>");
+              							out.println("</ul>");
+              						out.println("</div>");	
+                  				}
+                  			%>
+            			</div>
+            		</div>
+            		<div class="col-md-6" style="min-width: 300px;">
+            			Fourth Year Courses
+            			<div class="courseCell" id="fourthYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+            				Drag Course Here...
+            				<%
+                  				for(int i=0; i < studentFourthYear.length; i++){
+                  					courseInfoVar = currUsrBeanId.getCourseInfo(studentFourthYear[i]);
+                  					creditVar = courseInfoVar[4];
+                  					aokVar = courseInfoVar[5];
+                  					tagVar = courseInfoVar[6];
+                  			
+                  			
+                  					out.println("<div class=\"CoursePanel\" id=\"" + studentFourthYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\">");
+                  						//out.println("<input form=\"form_scheduler\" type=\"hidden\" name=\"" + studentFourthYear[i] + "\" value=\"" + studentFourthYear[i] + "\">");
+                  						out.println(studentFourthYear[i]);
+              							out.println("<ul>");
+              								out.println("<li>Credits: " + creditVar + "</li>");
+              								out.println("<li>AoKs: " + aokVar + "</li>");
+              								out.println("<li>Tags: " + tagVar + "</li>");
+              							out.println("</ul>");
+              						out.println("</div>");	
+                  				}
+                  			%>
             			</div>
             		</div>
           		</div>
         	</div>
         	<div class="col-md-3">
-        		Planned Schedule
+        		<input type="submit" value="Save Schedule"><br>
+        		<strong><u>Remaining Requirements</u></strong>
         		<ul class="">
-                  <li>Credits: #.##</li>
-                  <li>Tags: I, O, etc..</li>
-                  <li>AoKs: IEJ, etc..</li>
-                </ul>
-        		Remaining Requirements
-        		<ul class="">
-                  <li>Credits: #.##</li>
-                  <li>Tags: I, O, etc..</li>
-                  <li>AoKs: IEJ, etc..</li>
-                </ul>
-        		<ul class="nav nav-list">
-                  <li>
-                  	<div id="drag2" draggable="true" draggable="true" ondragstart="drag(event)" width="336" height="69">
-                  		Draggable Course
-                  	</div>
-                  	<div class="CoursePanel" id="drag3" draggable="true" draggable="true" ondragstart="drag(event)">
-                  		CS475 Software
-                  		<ul>
-                  			<li>Credits: 1.00</li>
-                  			<li>Tags: N/A</li>
-                  			<li>AoKs: N/A</li>
-                  		</ul>
-                  	</div>
-                  </li>
+        		<%
+                    String[] remainingCourses;
+                    remainingCourses = studentRemainingCourses.split(",");
+                    out.println("<strong><u>Remaining Courses:</u></strong>");
+                  	for(int i=0; i < remainingCourses.length; i++){
+              			out.println("<li>" + remainingCourses[i] + "</li>");
+                 	}
+                  	out.println("<strong><u>Remaining Credits:</u></strong> " + studentRemainingCredits + "<br>");
+  					out.println("<strong><u>Remaining Fields:</u></strong>");
+					for(int i=0; i < studentRemainingFields.length; i++){
+						out.println("<li> " + studentRemainingFields[i] + "</li>");
+					}
+                 %>
                 </ul>
         	</div>
       	</div>
+      	</form>
       	
       </div> <!-- /container -->
       <nav id="sidebar" class="">
@@ -184,7 +275,21 @@
         					out.println("<a href=\"#" + majors[x] + "Submenu\" data-toggle=\"collapse\" aria-expanded=\"false\" class=\"collapsed\">" + majors[x] + " Major</a>");
         					out.println("<ul class=\"list-unstyled collapse\" id=\"" + majors[x] + "Submenu\" aria-expanded=\"false\" style=\"height: 0px;\">");
         						for(int y=0; y < majorCourses.length; y++){
-        							out.println("<li><a href=\"#\">" + majorCourses[y] + "</a></li>");
+        							courseInfoVar = currUsrBeanId.getCourseInfo(majorCourses[y]);
+                  					creditVar = courseInfoVar[4];
+                  					aokVar = courseInfoVar[5];
+                  					tagVar = courseInfoVar[6];
+                  					out.println("<li><span>");
+                  						out.println("<div class=\"CoursePanel\" id=\"" + majorCourses[y] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\">");
+                  							//out.println("<input form=\"form_scheduler\" type=\"hidden\" name=\"" + majorCourses[y] + "\" value=\"" + majorCourses[y] + "\">");
+                  							out.println(majorCourses[y]);
+              								out.println("<ul>");
+              									out.println("<li>Credits: " + creditVar + "</li>");
+              									out.println("<li>AoKs: " + aokVar + "</li>");
+              									out.println("<li>Tags: " + tagVar + "</li>");
+              								out.println("</ul>");
+              							out.println("</div>");	
+              						out.println("</span></li>");
         						}
         					out.println("</ul>");
         				out.println("</li>");	
@@ -270,10 +375,10 @@
 	    	ev.dataTransfer.setData("text", ev.target.id);
 		}
 
-		function drop(ev) {
-    		ev.preventDefault();
-    		var data = ev.dataTransfer.getData("text");
-    		ev.target.appendChild(document.getElementById(data));
+		function drop(ev, el) {
+			  ev.preventDefault();
+			  var data = ev.dataTransfer.getData("text");
+			  el.appendChild(document.getElementById(data));
 		}
 		
 		$(document).ready(function () {
@@ -282,6 +387,70 @@
                 $(this).toggleClass('active');
             });
         });
+		
+		function saveSchedule(ev) {
+			//ev.preventDefault();
+			
+			var scheduleString;
+			var matchesYearOne = [];
+			var matchesYearTwo = [];
+			var matchesYearThree = [];
+			var matchesYearFour = [];
+			var searchYearOne = document.getElementById("firstYear").children;
+			var searchYearTwo = document.getElementById("secondYear").children;
+			var searchYearThree = document.getElementById("thirdYear").children;
+			var searchYearFour = document.getElementById("fourthYear").children;
+			
+			for(var i = 0; i < searchYearOne.length; i++) {
+			    if(searchYearOne[i].tagName == 'DIV') {
+			    	matchesYearOne.push(searchYearOne[i].id);
+			    	if(scheduleString){
+			    		scheduleString += ("," + searchYearOne[i].id);
+			    	} else {
+			    		scheduleString = searchYearOne[i].id;
+			    	}
+			    }
+			}
+			
+			scheduleString += "|";
+			for(var i = 0; i < searchYearTwo.length; i++) {
+			    if(searchYearOne[i].tagName == 'DIV') {
+			    	matchesYearTwo.push(searchYearTwo[i].id);
+			    	if(i > 0){
+			    		scheduleString += ("," + searchYearTwo[i].id);
+			    	} else {
+			    		scheduleString += searchYearTwo[i].id;
+			    	}
+			    }
+			}
+			
+			scheduleString += "|";
+			for(var i = 0; i < searchYearThree.length; i++) {
+			    if(searchYearThree[i].tagName == 'DIV') {
+			    	matchesYearThree.push(searchYearThree[i].id);
+			    	if(i > 0){
+			    		scheduleString += ("," + searchYearThree[i].id);
+			    	} else {
+			    		scheduleString += searchYearThree[i].id;
+			    	}
+			    }
+			}
+			
+			scheduleString += "|";
+			for(var i = 0; i < searchYearFour.length; i++) {
+			    if(searchYearFour[i].tagName == 'DIV') {
+			    	matchesYearFour.push(searchYearFour[i].id);
+			    	if(i > 0){
+			    		scheduleString += ("," + searchYearFour[i].id);
+			    	} else {
+			    		scheduleString += searchYearFour[i].id;
+			    	}
+			    }
+			}
+			document.getElementById("scheduleFormString").value = scheduleString;
+			return;
+		}
+		
     </script>
 
 </body>

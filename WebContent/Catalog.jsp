@@ -15,22 +15,10 @@
 
     <title>Elmhurst Planner</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+      <!-- Bootstrap core CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<!-- Custom page CSS  -->
-    <link href="PageLayout.css" rel="stylesheet">
-    <link href="Scheduler.css" rel="stylesheet">
-    <link href="sidebar.css" rel="stylesheet">
-    <style>
-		th:hover {
-		    color: grey!important;
-		    cursor: pointer;
-		}
-		th:hover {
-		    color: grey!important;
-		    cursor: pointer;
-		}
-	</style>
+	<link href="PageLayout.css" rel="stylesheet">
   </head>
 
   <body>
@@ -39,7 +27,7 @@
     	String eNumber = currUsrBeanId.getENumber();
     	String studentAdvisor = "tempAdvisor";
     %>
-    <nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
+	<nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
 		<a class="navbar-brand page-scroll" href="Dashboard.jsp"><img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"></a>
 		<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,13 +36,13 @@
 
 		<div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item">
-					<a class="nav-link" href="Dashboard.jsp">Dashboard</a>
-				</li>
-				<li class="nav-item ">
-					<a class="nav-link" href="Scheduler.jsp">Scheduler<span class="sr-only">(current)</span></a>
-				</li>
 				<li class="nav-item active">
+					<a class="nav-link" href="Dashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="Scheduler.jsp">Scheduler</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" href="Catalog.jsp">Course Catalog</a>
 				</li>
 				<li class="nav-item">
@@ -63,7 +51,8 @@
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link disabled" href="#">Signed in as, <% out.println(fullName); %></a>
+					<a class="nav-link disabled" href="#">Signed in as
+					<%=currUsrBeanId.getName() %></a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="Logout.jsp">Logout</a>
@@ -77,10 +66,12 @@
 			each year will be its own string.		
 	 -->
 	<main role="main">
-	<div><label>Search:<input type="text" id="searchStringInput"></label>
-	</div>
-	<div class="container" style="padding-top:1%; overflow-x:auto;">
-		<div class="col-xs-12">
+	 <div class="col-sm"></div>
+    <div class="col-sm"></div>
+	<div style="padding-top:1%;" class="col-sm"><label>Search:  <input type="text" id="searchStringInput"></label></div>
+	
+	<div class="container" style="padding-top:1%; ">
+		<div class="col">
 			<table class="table table-bordered table-hover" data-link="row" id="coursesTable">
 				<thead class="thead-dark">
 					<tr id="row0">

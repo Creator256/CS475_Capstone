@@ -9,7 +9,8 @@ import java.util.regex.Pattern;
 public class Student {
 	
 	String eNumber = "";
-	String name = "";
+	String firstName = "";
+	String lastName = "";
 	String major = "";
 	String[] schedulerClasses;
 	String[] yearOneClasses;
@@ -17,14 +18,32 @@ public class Student {
 	String[] yearThreeClasses;
 	String[] yearFourClasses;
 	
-	public Student(String eNumber, String name, DBBean bean) {
-		init(eNumber, name, bean);
+	public Student(String eNum, String fName, String lName, DBBean bean) {
+		init(eNum, fName, lName, bean);
 	}
 	
-	public void init(String eNumber, String name, DBBean bean) {
+	public Student(String eNum, DBBean bean) {
+		try {
+			PreparedStatement ps = bean.getConnection().prepareStatement("select * from person where eNumber = ?");
+			ps.setString(1, eNumber);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				firstName = rs.getString("FirstName");
+				lastName = rs.getString("LastName");
+			}
+			ps.close();
+		}
+		catch (Exception e) {
+
+		}
+		init(eNum, firstName, lastName, bean);
+	}
+	
+	public void init(String eNumber, String fName, String lName, DBBean bean) {
 		System.out.println("INIT STUDENT");
 		this.eNumber = eNumber;
-		this.name = name;
+		firstName = fName;
+		lastName = lName;
 		try {
 			
 			PreparedStatement ps = bean.getConnection().prepareStatement("select * from schedule where eNumberStudent = ?");
@@ -42,6 +61,7 @@ public class Student {
 			else {
 				System.out.println("Can't find a schedule for this student");
 			}
+			ps.close();
 		} catch (Exception e) {
 
 		}
@@ -60,6 +80,19 @@ public class Student {
 	}
 	public String[] getYearFourClasses() {
 		return yearFourClasses;
+	}
+	
+	public String getFirstName() {
+		return firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public String getENumber() {
+		return eNumber;
+	}
+	public String getMajor() {
+		return major;
 	}
 	
 }

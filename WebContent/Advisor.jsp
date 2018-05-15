@@ -60,41 +60,43 @@
 
 	<div class="container" style="padding-top:1%; overflow-x:auto;">
 		<div class="col-xs-12">
-			<table class="table table-bordered table-hover" data-link="row">
-				<thead class="thead-dark">
-					<tr>
-						<th scope="col">eNumber</th>
-						<th scope="col">First Name</th>
-						<th scope="col">Last Name</th>
-						<th scope="col">Major</th>
-					</tr>
-				</thead>
-				<tbody >
-				<% Advisor currentAdvisor = currUsrBeanId.getAdvisor();
-				boolean success = currentAdvisor.getStudents();
-				if(success) {
-					Map<String, String[]> advisorsStudents = currentAdvisor.getStudentinfo();
-					
-					for (Map.Entry<String, String[]> entry : advisorsStudents.entrySet()) {
-					    out.println("<tr>");
-					    String key = entry.getKey();
-					    String[] values = entry.getValue(); %>
-					    <td> <%= key %>  </td> 
-					    <% for(int i = 0; i < values.length; i++) {
-					    //System.out.println(key + ": " + values[i]); %>
-					    <td> <%= values[i] %>  </td> 
-					    <% } 
-					    out.println("</tr>");
-					 }
-				} %>
-<!-- 					<tr>
-						<th scope="col">e000000</th>
-						<th scope="col">Rotator Rotator Rotator</th>
-						<th scope="col">No lemon, no melon </th>
-						<th scope="col">Mathematics and the Foundations of Computer Science</th>
-					</tr> -->
-				</tbody>
-			</table>
+			<form action = "ProcessAdvisor.jsp">
+				<table class="table table-bordered table-hover" data-link="row">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">eNumber</th>
+							<th scope="col">First Name</th>
+							<th scope="col">Last Name</th>
+							<th scope="col">Major</th>
+						</tr>
+					</thead>
+					<tbody >
+					<% Advisor currentAdvisor = currUsrBeanId.getAdvisor();
+					boolean success = currentAdvisor.getStudents();
+					if(success) {
+						Map<String, String[]> advisorsStudents = currentAdvisor.getStudentinfo();
+						
+						for (Map.Entry<String, String[]> entry : advisorsStudents.entrySet()) {
+						    out.println("<tr>");
+						    String key = entry.getKey();
+						    String[] values = entry.getValue(); %>
+						    <td> <button name="studentEnumber" type="submit" value="<%= key %>"><%=key %></button>  </td>
+						    <% for(int i = 0; i < values.length; i++) {
+						    //System.out.println(key + ": " + values[i]); %>
+						    <td> <%= values[i] %>  </td> 
+						    <% } 
+						    out.println("</tr>");
+						 }
+					} %>
+	<!-- 					<tr>
+							<th scope="col">e000000</th>
+							<th scope="col">Rotator Rotator Rotator</th>
+							<th scope="col">No lemon, no melon </th>
+							<th scope="col">Mathematics and the Foundations of Computer Science</th>
+						</tr> -->
+					</tbody>
+				</table>
+			</form>
  		</div>
 	</div> 
 

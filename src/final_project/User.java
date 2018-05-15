@@ -22,8 +22,6 @@ public class User {
 	public boolean Login() {
 		boolean stat = false;
 		try {
-			System.out.println(eNumber);
-			System.out.println(password);
 			dbbean = new DBBean();
 			dbbean.InitConnection();
 			PreparedStatement ps = dbbean.getConnection().prepareStatement("select * from person where eNumber = ? and password = ?");
@@ -36,7 +34,7 @@ public class User {
 				lastName = rs.getString("LastName");
 				personType = rs.getInt("isStudent");
 				if(isStudent()) {
-					student = new Student(eNumber, firstName + " " + lastName, dbbean);
+					createStudent(eNumber, firstName, lastName);
 					//student.init(eNumber, firstName + " " + lastName, dbbean);
 				}
 				else {
@@ -93,6 +91,14 @@ public class User {
 	
 	public Student getStudent() {
 		return student;
+	}
+	
+	public void createStudent(String eNum, String fName, String lName) {
+		student = new Student(eNumber, firstName, lastName, dbbean);
+	}
+	
+	public void createStudent(String eNum) {
+		student = new Student(eNum, dbbean);
 	}
 	
 	public Advisor getAdvisor() {

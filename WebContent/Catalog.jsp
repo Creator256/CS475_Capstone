@@ -102,7 +102,7 @@
 		    		out.println("<td>--</td>"); 
 		    	else 
 		    		out.println("<td>" + courseI[2] + "</td>"); 
-			    out.println("<td class=\"descr\"> -- </td>");  // j = 3
+			    out.println("<td class=\"descr\"  data-toggle=\"tooltip\" title=\"" + courseI[3] + "\"> -- </td>");  // j = 3
 			    for(int j = 4; j < courseI.length; j++) { 
 			    	if(courseI[j] == null)
 			    		out.println("<td>--</td>"); 
@@ -119,7 +119,7 @@
     </main>
 
     <footer class="container">
-      <p>© Company 2017-2018</p>
+      <p>Â© Company 2017-2018</p>
     </footer>
 
     <!-- Bootstrap core JavaScript
@@ -160,7 +160,7 @@
 		makeSortable(document.getElementById('coursesTable'));
 	}
 	document.addEventListener('DOMContentLoaded',function() {
-	    document.querySelector('input[id="searchStringInput"]').onkeyup=filterSearchCourses;
+	Â Â Â  document.querySelector('input[id="searchStringInput"]').onkeyup=filterSearchCourses;
 	},false);
 	
 	function filterSearchCourses(event) {

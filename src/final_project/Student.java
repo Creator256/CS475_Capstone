@@ -59,7 +59,7 @@ public class Student {
 				String classes = rs.getString("courses");
 				//System.out.println(classes);
 				schedulerClasses = classes.split(Pattern.quote(" | "));
-				if(schedulerClasses!= null && schedulerClasses.length > 0) {
+				if(schedulerClasses != null && schedulerClasses.length > 0) {
 					yearOneClasses = schedulerClasses[0].split(", ");
 					if(schedulerClasses.length > 1) yearTwoClasses = schedulerClasses[1].split(", ");
 					if(schedulerClasses.length > 2) yearThreeClasses = schedulerClasses[2].split(", ");
@@ -318,7 +318,6 @@ public class Student {
 			System.out.println("");
 			for(int y = 0; y < yearTwoClasses.length; y++) {
 				courseInfo = getCourseInfo(yearTwoClasses[y]);
-				System.out.println("yearTWO: " + yearTwoClasses[y] + "yearTWO::: " + courseInfo[4]);
 				if(courseInfo[4] != null) {
 					creditsTaken += Double.parseDouble(courseInfo[4]);
 				}

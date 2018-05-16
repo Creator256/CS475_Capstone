@@ -241,16 +241,27 @@
         		<ul class="">
         		<%
                     String[] remainingCourses;
-                    remainingCourses = studentRemainingCourses.split(", ");
                     out.println("<strong><u>Remaining Courses:</u></strong>");
-                  	for(int i=0; i < remainingCourses.length; i++){
-              			out.println("<li>" + remainingCourses[i] + "</li>");
-                 	}
+                  	
+      				if(studentRemainingCourses == null || studentRemainingCourses.isEmpty()) {
+       					out.println("<li>" + "No major courses unscheduled" + "</li>");
+       				}
+       				else {
+            			remainingCourses = studentRemainingCourses.split(", ");
+    					for(int i=0; i < remainingCourses.length; i++){
+							out.println("<li>" + remainingCourses[i] + "</li>");
+    					}
+       				}
                   	out.println("<strong><u>Remaining Credits:</u></strong> " + studentRemainingCredits + "<br>");
   					out.println("<strong><u>Remaining Fields:</u></strong>");
-					for(int i=0; i < studentRemainingFields.length; i++){
-						out.println("<li> " + studentRemainingFields[i] + "</li>");
-					}
+  					if(studentRemainingFields == null || studentRemainingFields.length == 0) {
+       					out.println("<li>" + "All requirements scheduled" + "</li>");
+       				}
+       				else {
+    					for(int i=0; i < studentRemainingFields.length; i++){
+							out.println("<li>" + studentRemainingFields[i] + "</li>");
+    					}
+       				}
                  %>
                 </ul>
         	</div>
@@ -304,38 +315,6 @@
         			}
         		}
         	%>
-<!--             <li>
-                <a href="#CGESubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">CGE Courses</a>
-                	<ul class="list-unstyled collapse" id="CGESubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
-                    </ul>
-            </li>
-           	<li>
-           		<a href="#IGSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">IG Courses</a>
-                	<ul class="list-unstyled collapse" id="IGSubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
-                    </ul>
-            </li>
-            <li>
-            	<a href="#MTHSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">MTH Courses</a>
-                	<ul class="list-unstyled collapse" id="MTHSubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
-                    </ul>
-            </li>
-            <li>
-            	<a href="#ENGSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">ENG Courses</a>
-                	<ul class="list-unstyled collapse" id="ENGSubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
-                    </ul>
-            </li> -->
       	</ul>
       	
       	<ul class="list-unstyled CTAs">

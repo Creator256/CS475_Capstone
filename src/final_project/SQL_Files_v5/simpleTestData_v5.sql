@@ -55,6 +55,26 @@ VALUES
 ('e0777777', 2),
 ('e0666666', 3); 
 
+INSERT INTO `advising_app`.`schedule`
+(`eNumberStudent`,
+`time`,
+`courses`)
+VALUES
+('e0000000', -- CS Major
+'2018/2019',
+'FYS-100, ENG-105, CS-220, MTH-151, CS-315, ENG-106, CS-255, MTH-152 | CS-310, CS-318, MTH-301, BID-001, CS-315, CS-360, BID-002, BID-003 | CS-419, CS-418, BID-004, BID-005, CS-320, CS-440, BID-006, BID-007 | CS-420, IS-423, BID-322, BID-020, CS-435, CS-475, BID-030, BID-040'),
+('e0666666', -- CGE Major
+'2018/2019',
+'FYS-100, ENG-105, CS-220, MTH-151'),
+('e0777777', -- IS Major
+'2019/2020',
+'FYS-100, ENG-105, CS-220, MTH-151, IS-224, BUS-230, MTH-345, BID-005'),
+('e0888888', -- CS Major
+'2019/2020',
+NULL),
+('e0999999', -- CS Major
+'2019/2020',
+NULL);
 
 INSERT INTO `advising_app`.`advisor`
 (`eNumberAdvisor`,
@@ -79,7 +99,7 @@ INSERT INTO `advising_app`.`course`
 `prequisites`)
 VALUES
 ('FYS-100', 0, 'FYS Course Name', NULL, 
-1.00, NULL, NULL, NULL, NULL),
+1.00, NULL, NULL, 'FYS-100', NULL),
 ('BID-322', 0, 'EDU/PHL Phil Human Abilities', 'An examination of human ability and the social, cultural, philosophical, and political influences on interactions with those having differing abilities. What is normal? What is a disability? What is it like to have a disability? How does our conception of human nature influence how we see and treat those with disabilities? How are disabilities right movements attemping to alter our perception of disabilities? Why are looks so important to us and how do they influence out judgments? How do we perceive the bodies and faces of others? This course will address these questions and others by bringing philosophical inquiry and analysis to issues surrounding those with disabilities.', 
 1.00, 'InquiryEthics&Justice, Social&PoliticalAnalysis', NULL, NULL, NULL),
 ('BID-001', 0, 'ReligiousStudiesContext Class', 'This course fulfills the ReligiousStudiesContext Area of Knowledge', 
@@ -242,7 +262,7 @@ INSERT INTO `advising_app`.`course`
 `prequisites`)
 VALUES
 ('ENG-105', 5, 'Composition I', 'A two-part sequence of introductory course, offering instruction and guidance designed to develop college-level writing and reading skills. ENG 105 focuses on increasing students\' written fluency; their ability to use the writing process as a means of discovering ideas; to see revision as a necessary and recursive part of the writing process; to see good writing as dependent on its context; and to create relationships between reading and writing. Fall Term, Spring Term.', 
-1.00, NULL, NULL, NULL, NULL),
+1.00, NULL, NULL, 'writing proficiency', NULL),
 ('ENG-106', 5, 'Composition II', 'ENG 106 focuses on increasing students\' scholarly literacy; their ability to manage written assignments that derive content from extensive reading; to rework drafts that, in logically complex ways, quote or paraphrase other texts; and to understand the varieties of purpose, especially persuasive, that different kinds of academic assignments based on reading might have. In-class introduction to the College\'s library and writing technology resources. Prerequisite: ENG 105, the equivalent, or acceptable score on the Writing Placement Test. Fall Term, Spring Term.', 
 1.00, NULL, NULL, 'ENG-106', '{ p: ENG-105 }');
 
@@ -278,18 +298,3 @@ VALUES
 10.00,
 'experiential learning, Inquiry&EthicJustice, ReligiousStudiesContext, Literature, FineArts, HistoricalAnalysis, Social&PoliticalAnalysis, Cognitive&BehavioralSci, PhysicalScience, LifeScience, OralCommunication, QuantitativeReasoning, Writing300/400, InformationLiteracy, InterculturalGlobal, InterculturalDomestic, SocialRspnblty300/400, FYS-100, ENG-106, Capstone, experiential learning, mathematics proficiency, foreign language proficiency, writing proficiency, computer technology proficiency'
 );
-
-INSERT INTO `advising_app`.`schedule`
-(`eNumberStudent`,
-`time`,
-`courses`)
-VALUES
-('e0000000', -- CS Major
-'2018/2019',
-'FYS-100, ENG-105, CS-220, MTH-151, CS-315, ENG-106, CS-255, MTH-152 | CS-310, CS-318, MTH-301, BID-001, CS-315, CS-360, BID-002, BID-003 | CS-419, CS-418, BID-004, BID-005, CS-320, CS-440, BID-006, BID-007 | CS-420, IS-423, BID-322, BID-020, CS-435, CS-475, BID-030, BID-040'),
-('e0666666', -- CGE Major
-'2018/2019',
-'FYS-100, ENG-105, CS-220, MTH-151'),
-('e0777777', -- IS Major
-'2019/2020',
-'FYS-100, ENG-105, CS-220, MTH-151, IS-224, BUS-230, MTH-345, BID-005');

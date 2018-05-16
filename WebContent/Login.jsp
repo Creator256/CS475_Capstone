@@ -51,9 +51,6 @@
 				<input type="submit" value="Login" button type="button" class="btn btn-primary" style="background-color:#0c2340;"></button>
 			</div>
 		</form>
-		<%if(currUsrBeanId.getFailedLogin()){%>
-			<h6 style="color:red;" align="center">Invalid username and/or password</h6>		
-		<%}%>
 	</div>
 
 

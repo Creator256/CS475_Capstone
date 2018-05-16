@@ -26,12 +26,10 @@
   </head>
 
   <body>
-  	<%	if(currUsrBeanId.isLoggedIn()){ %>
 	<%
 		String studentName = currUsrBeanId.getName();
 		String studentNumber = currUsrBeanId.getENumber();
 		String studentAdvisor = "tempAdvisor";
-		currUsrBeanId.getStudent().getStudentSchedule();
 		String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
 		String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
 		String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
@@ -39,7 +37,7 @@
 		String studentMajorID = currUsrBeanId.getStudent().getMajorID();
 		String studentMajor = currUsrBeanId.getStudent().getMajor();
 		String studentRemainingCourses = currUsrBeanId.getStudent().getRemainingCourses();
-		double studentRemainingCredits = currUsrBeanId.getRemainingCredits(studentRemainingCourses, studentMajorID);
+		double studentRemainingCredits = currUsrBeanId.getStudent().getRemainingCredits();
 		String[] studentRemainingFields = currUsrBeanId.getStudent().getRemainingGeneralFields();
 	
 		String[] courseInfoVar;
@@ -47,7 +45,7 @@
 		String tagVar;
 		String aokVar;
 	
-		String[] majors = currUsrBeanId.getMajors();
+		String[] majors = currUsrBeanId.getAllMajorsAbbreviations();
 		String[] majorCourses;
     %>
     <nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
@@ -132,6 +130,7 @@
             			<div class="courseCell" id="firstYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
+            				if(studentFirstYear != null) {
                   				for(int i=0; i < studentFirstYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentFirstYear[i]);
                   					creditVar = courseInfoVar[4];
@@ -149,6 +148,7 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
+                  			}
                   			%>
             			</div>
             		</div>
@@ -157,6 +157,7 @@
             			<div class="courseCell" id="secondYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
+            				if(studentSecondYear != null) {
                   				for(int i=0; i < studentSecondYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentSecondYear[i]);
                   					creditVar = courseInfoVar[4];
@@ -174,6 +175,7 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
+                  			}
                   			%>
             			</div>
             		</div>
@@ -182,6 +184,7 @@
             			<div class="courseCell" id="thirdYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
+            				if(studentThirdYear != null) {
                   				for(int i=0; i < studentThirdYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentThirdYear[i]);
                   					creditVar = courseInfoVar[4];
@@ -199,6 +202,7 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
+                  			}
                   			%>
             			</div>
             		</div>
@@ -207,6 +211,7 @@
             			<div class="courseCell" id="fourthYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
+            				if(studentFourthYear != null) {
                   				for(int i=0; i < studentFourthYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentFourthYear[i]);
                   					creditVar = courseInfoVar[4];
@@ -224,6 +229,7 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
+                  			}
                   			%>
             			</div>
             		</div>
@@ -235,16 +241,27 @@
         		<ul class="">
         		<%
                     String[] remainingCourses;
-                    remainingCourses = studentRemainingCourses.split(",");
                     out.println("<strong><u>Remaining Courses:</u></strong>");
-                  	for(int i=0; i < remainingCourses.length; i++){
-              			out.println("<li>" + remainingCourses[i] + "</li>");
-                 	}
+                  	
+      				if(studentRemainingCourses == null || studentRemainingCourses.isEmpty()) {
+       					out.println("<li>" + "No major courses unscheduled" + "</li>");
+       				}
+       				else {
+            			remainingCourses = studentRemainingCourses.split(", ");
+    					for(int i=0; i < remainingCourses.length; i++){
+							out.println("<li>" + remainingCourses[i] + "</li>");
+    					}
+       				}
                   	out.println("<strong><u>Remaining Credits:</u></strong> " + studentRemainingCredits + "<br>");
   					out.println("<strong><u>Remaining Fields:</u></strong>");
-					for(int i=0; i < studentRemainingFields.length; i++){
-						out.println("<li> " + studentRemainingFields[i] + "</li>");
-					}
+  					if(studentRemainingFields == null || studentRemainingFields.length == 0) {
+       					out.println("<li>" + "All requirements scheduled" + "</li>");
+       				}
+       				else {
+    					for(int i=0; i < studentRemainingFields.length; i++){
+							out.println("<li>" + studentRemainingFields[i] + "</li>");
+    					}
+       				}
                  %>
                 </ul>
         	</div>
@@ -269,12 +286,12 @@
         	</li>
         
         	<%
-        		
-        		for(int x=0; x < majors.length; x++) {
-        			majorCourses = currUsrBeanId.getMajorCourses(majors[x]);
+        		String[] majorIds = currUsrBeanId.getAllMajorsIds();
+        		for(int x=0; x < majorIds.length; x++) {
+        			majorCourses = currUsrBeanId.getIdcoursesByMajorId(majorIds[x]);
         			if(majorCourses[0] != null && !majorCourses[0].isEmpty()){
         				out.println("<li class=\"\">");
-        					out.println("<a href=\"#" + majors[x] + "Submenu\" data-toggle=\"collapse\" aria-expanded=\"false\" class=\"collapsed\">" + majors[x] + " Major</a>");
+        					out.println("<a href=\"#" + majors[x] + "Submenu\" data-toggle=\"collapse\" aria-expanded=\"false\" class=\"collapsed\">" + majors[x] + " Courses</a>");
         					out.println("<ul class=\"list-unstyled collapse\" id=\"" + majors[x] + "Submenu\" aria-expanded=\"false\" style=\"height: 0px;\">");
         						for(int y=0; y < majorCourses.length; y++){
         							courseInfoVar = currUsrBeanId.getCourseInfo(majorCourses[y]);
@@ -298,38 +315,6 @@
         			}
         		}
         	%>
-            <li>
-                <a href="#CGESubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">CGE Courses</a>
-                	<ul class="list-unstyled collapse" id="CGESubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
-                    </ul>
-            </li>
-           	<li>
-           		<a href="#IGSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">IG Courses</a>
-                	<ul class="list-unstyled collapse" id="IGSubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
-                    </ul>
-            </li>
-            <li>
-            	<a href="#MTHSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">MTH Courses</a>
-                	<ul class="list-unstyled collapse" id="MTHSubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
-                    </ul>
-            </li>
-            <li>
-            	<a href="#ENGSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">ENG Courses</a>
-                	<ul class="list-unstyled collapse" id="ENGSubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
-                    </ul>
-            </li>
       	</ul>
       	
       	<ul class="list-unstyled CTAs">
@@ -407,43 +392,43 @@
 			    if(searchYearOne[i].tagName == 'DIV') {
 			    	matchesYearOne.push(searchYearOne[i].id);
 			    	if(scheduleString){
-			    		scheduleString += ("," + searchYearOne[i].id);
+			    		scheduleString += (", " + searchYearOne[i].id);
 			    	} else {
 			    		scheduleString = searchYearOne[i].id;
 			    	}
 			    }
 			}
 			
-			scheduleString += "|";
+			scheduleString += " | ";
 			for(var i = 0; i < searchYearTwo.length; i++) {
 			    if(searchYearOne[i].tagName == 'DIV') {
 			    	matchesYearTwo.push(searchYearTwo[i].id);
 			    	if(i > 0){
-			    		scheduleString += ("," + searchYearTwo[i].id);
+			    		scheduleString += (", " + searchYearTwo[i].id);
 			    	} else {
 			    		scheduleString += searchYearTwo[i].id;
 			    	}
 			    }
 			}
 			
-			scheduleString += "|";
+			scheduleString += " | ";
 			for(var i = 0; i < searchYearThree.length; i++) {
 			    if(searchYearThree[i].tagName == 'DIV') {
 			    	matchesYearThree.push(searchYearThree[i].id);
 			    	if(i > 0){
-			    		scheduleString += ("," + searchYearThree[i].id);
+			    		scheduleString += (", " + searchYearThree[i].id);
 			    	} else {
 			    		scheduleString += searchYearThree[i].id;
 			    	}
 			    }
 			}
 			
-			scheduleString += "|";
+			scheduleString += " | ";
 			for(var i = 0; i < searchYearFour.length; i++) {
 			    if(searchYearFour[i].tagName == 'DIV') {
 			    	matchesYearFour.push(searchYearFour[i].id);
 			    	if(i > 0){
-			    		scheduleString += ("," + searchYearFour[i].id);
+			    		scheduleString += (", " + searchYearFour[i].id);
 			    	} else {
 			    		scheduleString += searchYearFour[i].id;
 			    	}
@@ -454,8 +439,6 @@
 		}
 		
     </script>
-    <% } else { %>
-	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 
 </body>
 </html>

@@ -20,12 +20,9 @@
 	<!-- Custom page CSS  -->
     <link href="PageLayout.css" rel="stylesheet">
     <link href="sidebar.css" rel="stylesheet">
-
   </head>
 
   <body>
-    <%	if(currUsrBeanId.isLoggedIn()){ %>
-
 	<%
     	String studentName = currUsrBeanId.getName();
     	String studentNumber = currUsrBeanId.getENumber();
@@ -37,7 +34,9 @@
     	String studentMajorID = currUsrBeanId.getStudent().getMajorID();
     	String studentMajor = currUsrBeanId.getStudent().getMajor();
     	String studentRemainingCourses = currUsrBeanId.getStudent().getRemainingCourses();
-    	double studentRemainingCredits = currUsrBeanId.getRemainingCredits(studentRemainingCourses, studentMajorID);
+    	System.out.println("DASHBOARD REMAINING COURSES: " + studentRemainingCourses);
+    	double studentRemainingCredits = currUsrBeanId.getStudent().getRemainingCredits();
+    	System.out.println("DASHBOARD REMAINING CREDITS: " + studentRemainingCredits);
     	String[] studentRemainingFields = currUsrBeanId.getStudent().getRemainingGeneralFields();
     	
     	String[] courseInfoVar;
@@ -45,7 +44,7 @@
   		String tagVar;
   		String aokVar;
     	
-  		String[] majors = currUsrBeanId.getMajors();
+  		String[] majors = currUsrBeanId.getAllMajorsAbbreviations();
   		String[] majorCourses;
     %>
 
@@ -130,7 +129,8 @@
                   <button class="accordion active" id="CourseButton"><h2>Current Courses</h2></button>
                   <div class="panel" style="display: block;">
                   	<%
-                  		for(int i=0; i < studentFirstYear.length; i++){
+                  	if(studentFirstYear != null) {
+                    	for(int i=0; i < studentFirstYear.length; i++){
                   			courseInfoVar = currUsrBeanId.getCourseInfo(studentFirstYear[i]);
                   			creditVar = courseInfoVar[4];
                   			aokVar = courseInfoVar[5];
@@ -146,6 +146,8 @@
               					out.println("</ul>");
               				out.println("</div>");	
                   		}
+                  	}
+
                   	%>
                   </div>
                 </li>
@@ -157,6 +159,7 @@
                 	<button class="accordion active" id="CourseButton"><h2>Upcoming Courses</h2></button>
                   		<div class="panel" style="display: block;">
                   			<%
+                  			if(studentSecondYear != null) {
                   				for(int i=0; i < studentSecondYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentSecondYear[i]);
                   					creditVar = courseInfoVar[4];
@@ -172,6 +175,7 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
+                  			}
                   			%>
                   		</div>
                   	</li>
@@ -187,10 +191,16 @@
                       			<ul class="ClassList">
                       			<%
                       				String[] remainingCourses;
-                          			remainingCourses = studentRemainingCourses.split(",");
-                  					for(int i=0; i < remainingCourses.length; i++){
-              							out.println("<li>" + remainingCourses[i] + "</li>");
-                  					}
+                      				if(studentRemainingCourses == null || studentRemainingCourses.isEmpty()) {
+                      					out.println("<li>" + "No major courses unscheduled" + "</li>");
+                      				}
+                      				else {
+	                          			remainingCourses = studentRemainingCourses.split(", ");
+	                  					for(int i=0; i < remainingCourses.length; i++){
+	              							out.println("<li>" + remainingCourses[i] + "</li>");
+	                  					}
+                      				}
+
                   				%>
                       			</ul>
                     		</div>
@@ -232,9 +242,9 @@
         	</li>
         
         	<%
-        		
-        		for(int x=0; x < majors.length; x++) {
-        			majorCourses = currUsrBeanId.getMajorCourses(majors[x]);
+        		String[] majorIds = currUsrBeanId.getAllMajorsIds();
+        		for(int x=0; x < majorIds.length; x++) {
+        			majorCourses = currUsrBeanId.getIdcoursesByMajorId(majorIds[x]);
         			if(majorCourses[0] != null && !majorCourses[0].isEmpty()){
         				out.println("<li class=\"\">");
         					out.println("<a href=\"#" + majors[x] + "Submenu\" data-toggle=\"collapse\" aria-expanded=\"false\" class=\"collapsed\">" + majors[x] + " Major</a>");
@@ -246,9 +256,8 @@
         				out.println("</li>");	
         			}
         		}
-        	%>
-        	
-            <li>
+        	%>  	
+<!--             <li>
                 <a href="#CGESubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">CGE Courses</a>
                 	<ul class="list-unstyled collapse" id="CGESubmenu" aria-expanded="false" style="height: 0px;">
                 		<li><a href="#">Example 1</a></li>
@@ -279,7 +288,7 @@
                         <li><a href="#">Example 2</a></li>
                         <li><a href="#">Example 3</a></li>
                     </ul>
-            </li>
+            </li> -->
       	</ul>
       	
       	<ul class="list-unstyled CTAs">
@@ -321,8 +330,5 @@
             });
         });
     </script>
-    
-  	<% } else { %>
-  	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 </body>
 </html>

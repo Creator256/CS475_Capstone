@@ -16,8 +16,6 @@ public class User {
 	private Advisor advisor;
 	private DBBean dbbean;
 	
-	private boolean failedLogin = false;
-	
 	private String[] majorCourses;
 	private String[][] allCourseInfo;
 
@@ -77,7 +75,12 @@ public class User {
 	public String getName() {
 		return firstName + " " + lastName;
 	}
-		
+	
+	public void setSchedule(String schedule) {
+		System.out.println("inside setSchedule!!!");
+		//set the user's schedule in the Database
+	}
+	
 	public boolean isStudent() {
 		if(personType == 1) {
 			return true;
@@ -110,36 +113,17 @@ public class User {
 		return advisor;
 	}
 	
-	public void setFailedLogin(boolean stat) {
-		failedLogin = stat;
-	}
-	
-	public boolean getFailedLogin() {
-		return failedLogin;
-	}
-	
-	/*
-	 * The functions below are used to information from the database
-	*/
-	
-	public void setSchedule(String schedule) {
-		try {
-			PreparedStatement ps = dbbean.getConnection().prepareStatement("update advising_app.schedule set courses = ? where eNumberStudent = ?");
-			ps.setString(1, schedule);
-			ps.setString(2, student.getENumber());
-			ps.executeUpdate();
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public String[] getMajors() {
-		String[] majors = new String[6];
+	public String[] getAllMajorsAbbreviations() {
+		String[] majors = null;
 		try {
 			PreparedStatement ps = dbbean.getConnection().prepareStatement("select abbreviation from major");
 			ResultSet rs = ps.executeQuery();
 			int i = 0;
+			
+			rs.last();
+			System.out.println(rs.getRow());
+			majors = new String[rs.getRow()];
+			rs.beforeFirst();
 			while(rs.next()) {
 				majors[i] = rs.getString(1);
 				i++;
@@ -148,6 +132,27 @@ public class User {
 			e.printStackTrace();
 		}
 
+		return majors;
+	}
+
+	public String[] getAllMajorsIds() {
+		String[] majors = null;
+		try {
+			PreparedStatement ps = dbbean.getConnection().prepareStatement("select idMajor from major");
+			ResultSet rs = ps.executeQuery();
+			int i = 0;
+			
+			rs.last();
+			System.out.println(rs.getRow());
+			majors = new String[rs.getRow()];
+			rs.beforeFirst();
+			while(rs.next()) {
+				majors[i] = Integer.toString(rs.getInt(1));
+				i++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return majors;
 	}
 	
@@ -161,7 +166,7 @@ public class User {
 				String classes = rs.getString(1);
 				System.out.println(classes);
 				if (classes != null && !classes.isEmpty()) {
-					majorCourses = classes.split(",");
+					majorCourses = classes.split(", ");
 				} else {
 					String[] nullCourses = new String[1];
 					return nullCourses;
@@ -173,6 +178,29 @@ public class User {
 		}
 
 		return majorCourses;
+	}
+	
+	public String[] getIdcoursesByMajorId(String idMajor) {
+		String[] courses = new String[1]; // so there is no error later on.
+		int rows = 0;
+		try {
+			PreparedStatement ps = dbbean.getConnection().prepareStatement("select idcourse from course where idMajor = ?");
+			ps.setString(1, idMajor);
+			ResultSet rs = ps.executeQuery();
+			rs.last();
+			rows = rs.getRow();
+			rs.beforeFirst();
+			courses = new String[rows];
+			int i = 0;
+			while(rs.next()) {
+				courses[i] = rs.getString(1);
+				i++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return courses;
 	}
 	
 	public String[] getCourses() {
@@ -199,15 +227,19 @@ public class User {
 			ps.setString(1, courseID);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				courseInfo[0] = rs.getString(1);
-				courseInfo[1] = Integer.toString(rs.getInt(2));
-				courseInfo[2] = rs.getString(3);
-				courseInfo[3] = rs.getString(4);
-				courseInfo[4] = Double.toString(rs.getDouble(5));
-				courseInfo[5] = rs.getString(6);
-				courseInfo[6] = rs.getString(7);
-				courseInfo[7] = rs.getString(8);
-				courseInfo[8] = rs.getString(9);
+				courseInfo[0] = rs.getString(1); 				// idcourse
+				courseInfo[1] = Integer.toString(rs.getInt(2)); // idmajor
+				courseInfo[2] = rs.getString(3); 				// course
+				courseInfo[3] = rs.getString(4); 				// description
+				courseInfo[4] = Double.toString(rs.getDouble(5));//credit
+				courseInfo[5] = rs.getString(6); 				// aoks
+				courseInfo[6] = rs.getString(7); 				// tags
+				courseInfo[7] = rs.getString(8); 				// other
+				courseInfo[8] = rs.getString(9); 				// prequisites
+				//System.out.print(courseID + ": ");
+				//for(int i = 0; i < 3; i++ ) System.out.print(courseInfo[i] + ". ");
+				//for(int i = 4; i < 9; i++ ) System.out.print(courseInfo[i] + ". ");
+				//System.out.println("");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -215,41 +247,7 @@ public class User {
 
 		return courseInfo;
 	}
-	
-	public double getRemainingCredits(String remainingCourses, String majorID) {
-		double credits = 0;
-		String neededCredits;
-		String[] splitCourses;
-		String[] currentCourseInfo;
-		try {
-			PreparedStatement ps = dbbean.getConnection().prepareStatement("select graduationcredits from graduationrequirement where idgradrequirement = ?");
-			ps.setString(1, majorID);
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				neededCredits = rs.getString(1);
-				if(Double.parseDouble(neededCredits) != 0) {
-					credits = credits + Double.parseDouble(neededCredits);
-				}
-				splitCourses = remainingCourses.split(",");
-				for(int x = 0; x < splitCourses.length; x++) {
-					currentCourseInfo = getCourseInfo(splitCourses[x]);
-					if(currentCourseInfo[4] != null && !currentCourseInfo[4].isEmpty()) {
-						if(Double.parseDouble(currentCourseInfo[4]) != 0) {
-							credits = credits - Double.parseDouble(currentCourseInfo[4]);
-						}
-					}
-				}
-				if(credits < 0) {
-					credits = 0;
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return credits;
-	}
-	
+
 	public String[][] getAllCourses() {
 		if(allCourseInfo != null) return allCourseInfo;
 		allCourseInfo = null; // = new String[][];

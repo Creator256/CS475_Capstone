@@ -16,6 +16,8 @@ public class User {
 	private Advisor advisor;
 	private DBBean dbbean;
 	
+	private boolean failedLogin = false;
+	
 	private String[] majorCourses;
 	private String[][] allCourseInfo;
 
@@ -75,12 +77,7 @@ public class User {
 	public String getName() {
 		return firstName + " " + lastName;
 	}
-	
-	public void setSchedule(String schedule) {
-		System.out.println("inside setSchedule!!!");
-		//set the user's schedule in the Database
-	}
-	
+		
 	public boolean isStudent() {
 		if(personType == 1) {
 			return true;
@@ -113,8 +110,37 @@ public class User {
 		return advisor;
 	}
 	
+<<<<<<< HEAD
 	public String[] getAllMajorsAbbreviations() {
 		String[] majors = null;
+=======
+	public void setFailedLogin(boolean stat) {
+		failedLogin = stat;
+	}
+	
+	public boolean getFailedLogin() {
+		return failedLogin;
+	}
+	
+	/*
+	 * The functions below are used to information from the database
+	*/
+	
+	public void setSchedule(String schedule) {
+		try {
+			PreparedStatement ps = dbbean.getConnection().prepareStatement("update advising_app.schedule set courses = ? where eNumberStudent = ?");
+			ps.setString(1, schedule);
+			ps.setString(2, student.getENumber());
+			ps.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String[] getMajors() {
+		String[] majors = new String[6];
+>>>>>>> b5b287656aaf1e8d1913271bfe02685519444f46
 		try {
 			PreparedStatement ps = dbbean.getConnection().prepareStatement("select abbreviation from major");
 			ResultSet rs = ps.executeQuery();

@@ -26,10 +26,12 @@
   </head>
 
   <body>
+  	<%	if(currUsrBeanId.isLoggedIn()){ %>
 	<%
 		String studentName = currUsrBeanId.getName();
 		String studentNumber = currUsrBeanId.getENumber();
 		String studentAdvisor = "tempAdvisor";
+		currUsrBeanId.getStudent().getStudentSchedule();
 		String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
 		String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
 		String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
@@ -460,6 +462,8 @@
 		}
 		
     </script>
+    <% } else { %>
+	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 
 </body>
 </html>

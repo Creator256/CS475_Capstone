@@ -20,9 +20,12 @@
 	<!-- Custom page CSS  -->
     <link href="PageLayout.css" rel="stylesheet">
     <link href="sidebar.css" rel="stylesheet">
+
   </head>
 
   <body>
+    <%	if(currUsrBeanId.isLoggedIn()){ %>
+
 	<%
     	String studentName = currUsrBeanId.getName();
     	String studentNumber = currUsrBeanId.getENumber();
@@ -330,5 +333,8 @@
             });
         });
     </script>
+    
+  	<% } else { %>
+  	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 </body>
 </html>

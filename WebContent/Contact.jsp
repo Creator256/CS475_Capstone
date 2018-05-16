@@ -22,6 +22,9 @@
   </head>
 
   <body>
+  
+  	<%	if(currUsrBeanId.isLoggedIn()){ %>
+  	
   	<% String studentName = currUsrBeanId.getName(); %>
     <nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
@@ -142,6 +145,8 @@
     	  document.getElementsById("defaultOpen").style.visibility = "block";
     	}
     </script>
-
+    
+	<% } else { %>
+  	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 </body>
 </html>

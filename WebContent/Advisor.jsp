@@ -24,7 +24,6 @@
 </head>
 
 <body>
-	<%	if(currUsrBeanId.isLoggedIn()){ %>
 	<nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
 		<a class="navbar-brand page-scroll" href="Dashboard.jsp"><img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"></a>
@@ -129,8 +128,5 @@
 			document.getElementsById("defaultOpen").style.visibility = "block";
 		}
 	</script>
-	
-	<% } else { %>
-	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 </body>
 </html>

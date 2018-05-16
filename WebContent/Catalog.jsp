@@ -36,13 +36,13 @@
 
 		<div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active">
+				<li class="nav-item">
 					<a class="nav-link" href="Dashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="Scheduler.jsp">Scheduler</a>
 				</li>
-				<li class="nav-item">
+				<li class="nav-item active">
 					<a class="nav-link" href="Catalog.jsp">Course Catalog</a>
 				</li>
 				<li class="nav-item">
@@ -50,10 +50,18 @@
 				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link disabled" href="#">Signed in as
-					<%=currUsrBeanId.getName() %></a>
-				</li>
+				<%
+					if(currUsrBeanId.isStudent()){
+						out.println("<li class=\"nav-item\">");
+							out.println("<a class=\"nav-link disabled\" href=\"#\">Signed in as, " + currUsrBeanId.getName() + "</a>");
+						out.println("</li>");
+					} else {
+						String advisorName = currUsrBeanId.getName();
+						out.println("<li class=\"nav-item\">");
+							out.println("<a class=\"nav-link\" href=\"Advisor.jsp\">Signed in as, " + advisorName + "</a>");
+						out.println("</li>");
+					}
+				%>
 				<li class="nav-item">
 					<a class="nav-link" href="Logout.jsp">Logout</a>
 				</li>
@@ -119,7 +127,7 @@
     </main>
 
     <footer class="container">
-      <p>© Company 2017-2018</p>
+      <p>� Company 2017-2018</p>
     </footer>
 
     <!-- Bootstrap core JavaScript
@@ -160,7 +168,7 @@
 		makeSortable(document.getElementById('coursesTable'));
 	}
 	document.addEventListener('DOMContentLoaded',function() {
-	    document.querySelector('input[id="searchStringInput"]').onkeyup=filterSearchCourses;
+	    document.querySelector('input[id="searchStringInput"]').onkeyup=filterSearchCourses;
 	},false);
 	
 	function filterSearchCourses(event) {

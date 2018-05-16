@@ -24,28 +24,29 @@
 
   <body>
 	<%
-    	String studentName = currUsrBeanId.getName();
-    	String studentNumber = currUsrBeanId.getENumber();
-    	String studentAdvisor = "tempAdvisor";
-    	String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
-    	String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
-    	String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
-    	String[] studentFourthYear = currUsrBeanId.getStudent().getYearFourClasses();
-    	String studentMajorID = currUsrBeanId.getStudent().getMajorID();
-    	String studentMajor = currUsrBeanId.getStudent().getMajor();
-    	String studentRemainingCourses = currUsrBeanId.getStudent().getRemainingCourses();
-    	System.out.println("DASHBOARD REMAINING COURSES: " + studentRemainingCourses);
-    	double studentRemainingCredits = currUsrBeanId.getStudent().getRemainingCredits();
-    	System.out.println("DASHBOARD REMAINING CREDITS: " + studentRemainingCredits);
-    	String[] studentRemainingFields = currUsrBeanId.getStudent().getRemainingGeneralFields();
-    	
-    	String[] courseInfoVar;
-  		String creditVar;
-  		String tagVar;
-  		String aokVar;
-    	
-  		String[] majors = currUsrBeanId.getAllMajorsAbbreviations();
-  		String[] majorCourses;
+		String studentName = currUsrBeanId.getStudent().getFirstName();
+		String studentNumber = currUsrBeanId.getStudent().getENumber();
+		String studentAdvisor = currUsrBeanId.getStudent().getAdvisor();
+		String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
+		String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
+		String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
+		String[] studentFourthYear = currUsrBeanId.getStudent().getYearFourClasses();
+		String studentMajorID = currUsrBeanId.getStudent().getMajorID();
+		String studentMajor = currUsrBeanId.getStudent().getMajor();
+		String studentRemainingCourses = currUsrBeanId.getStudent().getRemainingCourses();
+		System.out.println("DASHBOARD REMAINING COURSES: " + studentRemainingCourses);
+		double studentRemainingCredits = currUsrBeanId.getStudent().getRemainingCredits();
+		System.out.println("DASHBOARD REMAINING CREDITS: " + studentRemainingCredits);
+		String[] studentRemainingFields = currUsrBeanId.getStudent().getRemainingGeneralFields();
+	
+		String[] courseInfoVar;
+		String creditVar;
+		String tagVar;
+		String aokVar;
+		String preReqVar;
+	
+		String[] majors = currUsrBeanId.getAllMajorsAbbreviations();
+		String[] majorCourses;
     %>
 
 	<nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
@@ -71,9 +72,18 @@
 				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link disabled" href="#">Signed in as, <% out.println(studentName); %></a>
-				</li>
+				<%
+					if(currUsrBeanId.isStudent()){
+						out.println("<li class=\"nav-item\">");
+							out.println("<a class=\"nav-link disabled\" href=\"#\">Signed in as, " + currUsrBeanId.getName() + "</a>");
+						out.println("</li>");
+					} else {
+						String advisorName = currUsrBeanId.getName();
+						out.println("<li class=\"nav-item\">");
+							out.println("<a class=\"nav-link\" href=\"Advisor.jsp\">Signed in as, " + advisorName + "</a>");
+						out.println("</li>");
+					}
+				%>
 				<li class="nav-item">
 					<a class="nav-link" href="Logout.jsp">Logout</a>
 				</li>
@@ -129,12 +139,28 @@
                   <button class="accordion active" id="CourseButton"><h2>Current Courses</h2></button>
                   <div class="panel" style="display: block;">
                   	<%
-                  	if(studentFirstYear != null) {
-                    	for(int i=0; i < studentFirstYear.length; i++){
+                  		for(int i=0; i < studentFirstYear.length; i++){
                   			courseInfoVar = currUsrBeanId.getCourseInfo(studentFirstYear[i]);
-                  			creditVar = courseInfoVar[4];
-                  			aokVar = courseInfoVar[5];
-                  			tagVar = courseInfoVar[6];
+                  			if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
+          						creditVar = courseInfoVar[4];	
+          					} else {
+          						creditVar = "Not Available";
+          					}
+          					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
+          						aokVar = courseInfoVar[5];	
+          					} else {
+          						aokVar = "No AoKs";
+          					}
+          					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
+          						tagVar = courseInfoVar[6];	
+          					} else {
+          						tagVar = "No Tags";
+          					}
+          					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
+          						preReqVar = courseInfoVar[8];	
+          					} else {
+          						preReqVar = "No Prerequisites";
+          					}
                   			
                   			
                   			out.println("<div class=\"CoursePanel\">");
@@ -146,8 +172,6 @@
               					out.println("</ul>");
               				out.println("</div>");	
                   		}
-                  	}
-
                   	%>
                   </div>
                 </li>
@@ -158,25 +182,117 @@
                 <li id="DashboardPanel">
                 	<button class="accordion active" id="CourseButton"><h2>Upcoming Courses</h2></button>
                   		<div class="panel" style="display: block;">
-                  			<%
-                  			if(studentSecondYear != null) {
-                  				for(int i=0; i < studentSecondYear.length; i++){
-                  					courseInfoVar = currUsrBeanId.getCourseInfo(studentSecondYear[i]);
-                  					creditVar = courseInfoVar[4];
-                  					aokVar = courseInfoVar[5];
-                  					tagVar = courseInfoVar[6];
-                  			
-                  					out.println("<div class=\"CoursePanel\">");
-              							out.println(studentSecondYear[i]);
-              							out.println("<ul>");
-              								out.println("<li>Credits: " + creditVar + "</li>");
-              								out.println("<li>AoKs: " + aokVar + "</li>");
-              								out.println("<li>Tags: " + tagVar + "</li>");
-              							out.println("</ul>");
-              						out.println("</div>");	
-                  				}
-                  			}
-                  			%>
+                  			<button class="accordion active" id="CourseButton">Second Year</button>
+                    			<div class="panel" style="display: block;">
+                      				<%
+                      					for(int i=0; i < studentSecondYear.length; i++){
+                      						courseInfoVar = currUsrBeanId.getCourseInfo(studentSecondYear[i]);
+                      						if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
+                          						creditVar = courseInfoVar[4];	
+                          					} else {
+                          						creditVar = "Not Available";
+                          					}
+                          					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
+                          						aokVar = courseInfoVar[5];	
+                          					} else {
+                          						aokVar = "No AoKs";
+                          					}
+                          					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
+                          						tagVar = courseInfoVar[6];	
+                          					} else {
+                          						tagVar = "No Tags";
+                          					}
+                          					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
+                          						preReqVar = courseInfoVar[8];	
+                          					} else {
+                          						preReqVar = "No Prerequisites";
+                          					}
+                      			
+                      						out.println("<div class=\"CoursePanel\">");
+                  								out.println(studentSecondYear[i]);
+                  								out.println("<ul>");
+                  									out.println("<li>Credits: " + creditVar + "</li>");
+                  									out.println("<li>AoKs: " + aokVar + "</li>");
+                  									out.println("<li>Tags: " + tagVar + "</li>");
+                  								out.println("</ul>");
+                  							out.println("</div>");	
+                      					}
+                  					%>
+                    			</div>
+                    		<button class="accordion" id="CourseButton">Third Year</button>
+                    			<div class="panel">
+                      				<%
+                      					for(int i=0; i < studentThirdYear.length; i++){
+                      						courseInfoVar = currUsrBeanId.getCourseInfo(studentThirdYear[i]);
+                      						if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
+                          						creditVar = courseInfoVar[4];	
+                          					} else {
+                          						creditVar = "Not Available";
+                          					}
+                          					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
+                          						aokVar = courseInfoVar[5];	
+                          					} else {
+                          						aokVar = "No AoKs";
+                          					}
+                          					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
+                          						tagVar = courseInfoVar[6];	
+                          					} else {
+                          						tagVar = "No Tags";
+                          					}
+                          					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
+                          						preReqVar = courseInfoVar[8];	
+                          					} else {
+                          						preReqVar = "No Prerequisites";
+                          					}
+                      			
+                      						out.println("<div class=\"CoursePanel\">");
+                  								out.println(studentThirdYear[i]);
+                  								out.println("<ul>");
+                  									out.println("<li>Credits: " + creditVar + "</li>");
+                  									out.println("<li>AoKs: " + aokVar + "</li>");
+                  									out.println("<li>Tags: " + tagVar + "</li>");
+                  								out.println("</ul>");
+                  							out.println("</div>");	
+                      					}
+                  					%>
+                    			</div>
+                    		<button class="accordion" id="CourseButton">Fourth Year</button>
+                    			<div class="panel">
+                      				<%
+                      					for(int i=0; i < studentFourthYear.length; i++){
+                      						courseInfoVar = currUsrBeanId.getCourseInfo(studentFourthYear[i]);
+                      						if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
+                          						creditVar = courseInfoVar[4];	
+                          					} else {
+                          						creditVar = "Not Available";
+                          					}
+                          					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
+                          						aokVar = courseInfoVar[5];	
+                          					} else {
+                          						aokVar = "No AoKs";
+                          					}
+                          					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
+                          						tagVar = courseInfoVar[6];	
+                          					} else {
+                          						tagVar = "No Tags";
+                          					}
+                          					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
+                          						preReqVar = courseInfoVar[8];	
+                          					} else {
+                          						preReqVar = "No Prerequisites";
+                          					}
+                      			
+                      						out.println("<div class=\"CoursePanel\">");
+                  								out.println(studentFourthYear[i]);
+                  								out.println("<ul>");
+                  									out.println("<li>Credits: " + creditVar + "</li>");
+                  									out.println("<li>AoKs: " + aokVar + "</li>");
+                  									out.println("<li>Tags: " + tagVar + "</li>");
+                  								out.println("</ul>");
+                  							out.println("</div>");	
+                      					}
+                  					%>
+                    			</div>
                   		</div>
                   	</li>
                 </ul>
@@ -200,18 +316,21 @@
 	              							out.println("<li>" + remainingCourses[i] + "</li>");
 	                  					}
                       				}
-
                   				%>
                       			</ul>
                     		</div>
                   		<button class="accordion" id="CourseButton">General Requirements</button>
                     		<div class="panel">
+                    			<%
+                    				out.println("<strong><u>Remaining Credits:</u></strong> " + studentRemainingCredits + "<br>");
+              						out.println("<strong><u>Remaining Fields:</u></strong>");
+                    			%>
                       			<ul class="ClassList">
                       				<%
-                      					out.println("<strong><u>Remaining Credits:</u></strong> " + studentRemainingCredits + "<br>");
-                      					out.println("<strong><u>Remaining Fields:</u></strong>");
                   						for(int i=0; i < studentRemainingFields.length; i++){
-              								out.println("<li> " + studentRemainingFields[i] + "</li>");
+                  							if(studentRemainingFields[i] != null && !studentRemainingFields[i].isEmpty()) {
+                  								out.println("<li> " + studentRemainingFields[i] + "</li>");	
+                  							}
                   						}
                   					%>
                       			</ul>
@@ -229,18 +348,7 @@
     	<div class="sidebar-header">
     		<h3>Course Catalog</h3>
         </div>
-        <ul class="list-unstyled components">
-        	<li style="padding: 10px;">
-        		<form id="form_search" name="form_search" method="get" action="" class="form-inline">
-              		<div class="input-group">
-      					<input type="text" class="form-control" placeholder="Search Catalog...">
-      					<span class="input-group-btn">
-        					<button class="btn btn-secondary" type="button" style="background: #154073;">Search</button>
-      					</span>
-    				</div>
-           		</form>
-        	</li>
-        
+        <ul class="list-unstyled components">        
         	<%
         		String[] majorIds = currUsrBeanId.getAllMajorsIds();
         		for(int x=0; x < majorIds.length; x++) {
@@ -257,43 +365,11 @@
         			}
         		}
         	%>  	
-<!--             <li>
-                <a href="#CGESubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">CGE Courses</a>
-                	<ul class="list-unstyled collapse" id="CGESubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Example 1</a></li>
-                        <li><a href="#">Example 2</a></li>
-                        <li><a href="#">Example 3</a></li>
-                    </ul>
-            </li>
-           	<li>
-           		<a href="#IGSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">IG Courses</a>
-                	<ul class="list-unstyled collapse" id="IGSubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Example 1</a></li>
-                        <li><a href="#">Example 2</a></li>
-                        <li><a href="#">Example 3</a></li>
-                    </ul>
-            </li>
-            <li>
-            	<a href="#MTHSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">MTH Courses</a>
-                	<ul class="list-unstyled collapse" id="MTHSubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Example 1</a></li>
-                        <li><a href="#">Example 2</a></li>
-                        <li><a href="#">Example 3</a></li>
-                    </ul>
-            </li>
-            <li>
-            	<a href="#ENGSubmenu" data-toggle="collapse" aria-expanded="false" class="collapsed">ENG Courses</a>
-                	<ul class="list-unstyled collapse" id="ENGSubmenu" aria-expanded="false" style="height: 0px;">
-                		<li><a href="#">Example 1</a></li>
-                        <li><a href="#">Example 2</a></li>
-                        <li><a href="#">Example 3</a></li>
-                    </ul>
-            </li> -->
       	</ul>
       	
       	<ul class="list-unstyled CTAs">
-        	<li><a href="#" class="download">Download source</a></li>
-        	<li><a href="#" class="article">Back to article</a></li>
+        	<li><a href="Catalog.jsp" class="download">View Full Catalog</a></li>
+        	<li><a href="Contact.jsp" class="article">Learn More</a></li>
        	</ul>
 	</nav>
     </div>  

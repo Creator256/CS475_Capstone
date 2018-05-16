@@ -113,6 +113,9 @@ a, a:hover, a:focus {
 #sidebar ul li span div ul{
     display: none;
 }
+#sidebar ul li span div button{
+    display: none;
+}
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
     color: #fff;

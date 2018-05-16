@@ -46,9 +46,18 @@
 				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link disabled" href="#">Signed in as, <% out.println(studentName); %></a>
-				</li>
+				<%
+					if(currUsrBeanId.isStudent()){
+						out.println("<li class=\"nav-item\">");
+							out.println("<a class=\"nav-link disabled\" href=\"#\">Signed in as, " + currUsrBeanId.getName() + "</a>");
+						out.println("</li>");
+					} else {
+						String advisorName = currUsrBeanId.getName();
+						out.println("<li class=\"nav-item\">");
+							out.println("<a class=\"nav-link\" href=\"Advisor.jsp\">Signed in as, " + advisorName + "</a>");
+						out.println("</li>");
+					}
+				%>
 				<li class="nav-item">
 					<a class="nav-link" href="Logout.jsp">Logout</a>
 				</li>
@@ -128,7 +137,6 @@
     <script type="text/javascript">
     	var acc = document.getElementsByClassName("accordion");
     	var i;
-
     	for (i = 0; i < acc.length; i++) {
       		acc[i].onclick = function() {
       			this.classList.toggle("active");
@@ -137,7 +145,6 @@
         		else                  { panel.style.display = "block"; }
       		}
     	}
-
     	function autoOpen() {
     	  document.getElementsById("defaultOpen").style.visibility = "block";
     	}

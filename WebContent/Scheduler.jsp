@@ -27,9 +27,9 @@
 
   <body>
 	<%
-		String studentName = currUsrBeanId.getName();
-		String studentNumber = currUsrBeanId.getENumber();
-		String studentAdvisor = "tempAdvisor";
+		String studentName = currUsrBeanId.getStudent().getFirstName();
+		String studentNumber = currUsrBeanId.getStudent().getENumber();
+		String studentAdvisor = currUsrBeanId.getStudent().getAdvisor();
 		String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
 		String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
 		String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
@@ -37,14 +37,17 @@
 		String studentMajorID = currUsrBeanId.getStudent().getMajorID();
 		String studentMajor = currUsrBeanId.getStudent().getMajor();
 		String studentRemainingCourses = currUsrBeanId.getStudent().getRemainingCourses();
+		System.out.println("DASHBOARD REMAINING COURSES: " + studentRemainingCourses);
 		double studentRemainingCredits = currUsrBeanId.getStudent().getRemainingCredits();
+		System.out.println("DASHBOARD REMAINING CREDITS: " + studentRemainingCredits);
 		String[] studentRemainingFields = currUsrBeanId.getStudent().getRemainingGeneralFields();
-	
+
 		String[] courseInfoVar;
 		String creditVar;
 		String tagVar;
 		String aokVar;
-	
+		String preReqVar;
+
 		String[] majors = currUsrBeanId.getAllMajorsAbbreviations();
 		String[] majorCourses;
     %>
@@ -71,9 +74,18 @@
 				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link disabled" href="#">Signed in as, <% out.println(studentName); %></a>
-				</li>
+				<%
+					if(currUsrBeanId.isStudent()){
+						out.println("<li class=\"nav-item\">");
+							out.println("<a class=\"nav-link disabled\" href=\"#\">Signed in as, " + currUsrBeanId.getName() + "</a>");
+						out.println("</li>");
+					} else {
+						String advisorName = currUsrBeanId.getName();
+						out.println("<li class=\"nav-item\">");
+							out.println("<a class=\"nav-link\" href=\"Advisor.jsp\">Signed in as, " + advisorName + "</a>");
+						out.println("</li>");
+					}
+				%>
 				<li class="nav-item">
 					<a class="nav-link" href="Logout.jsp">Logout</a>
 				</li>
@@ -121,25 +133,46 @@
         <!-- Container for Scheduler -->
         <form id="form_scheduler" name="form_scheduler" onsubmit="saveSchedule(event)" action="ProcessScheduler.jsp">
         <input form="form_scheduler" type="hidden" name="scheduleFormString" id="scheduleFormString" value="">
-        <div class="row">
+        <div class="row" style="margin-bottom: 0px;">
+        	<div class="col-md-12" style="white-space: nowrap;">
+        		<input type="submit" id="ScheduleButton" value="Save Schedule">
+        	</div>
+        </div>
+        <div class="row" style="margin-top: 0px;">
         	<div class="col-md-9" style="overflow-x: scroll; white-space: nowrap;">
-        		Area for schedule/plan
-        		<div class="row">
-            		<div class="col-md-6" style="min-width: 300px;">
+        		<div class="row" style="display: inline-block; position: relative; vertical-align: top;">
+            		<div class="col-sm-3" id="YearColumn">
             			First Year Courses
             			<div class="courseCell" id="firstYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
-            				if(studentFirstYear != null) {
                   				for(int i=0; i < studentFirstYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentFirstYear[i]);
-                  					creditVar = courseInfoVar[4];
-                  					aokVar = courseInfoVar[5];
-                  					tagVar = courseInfoVar[6];
+                  					
+                  					if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
+                  						creditVar = courseInfoVar[4];	
+                  					} else {
+                  						creditVar = "Not Available";
+                  					}
+                  					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
+                  						aokVar = courseInfoVar[5];	
+                  					} else {
+                  						aokVar = "No AoKs";
+                  					}
+                  					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
+                  						tagVar = courseInfoVar[6];	
+                  					} else {
+                  						tagVar = "No Tags";
+                  					}
+                  					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
+                  						preReqVar = courseInfoVar[8];	
+                  					} else {
+                  						preReqVar = "No Prerequisites";
+                  					}
                   			
-                  			
-                  					out.println("<div class=\"CoursePanel\" id=\"" + studentFirstYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\">");
+                  					out.println("<div class=\"CoursePanel\" id=\"" + studentFirstYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"Prerequisites: " + preReqVar + "\">");
                   						//out.println("<input form=\"form_scheduler\" type=\"hidden\" name=\"" + studentFirstYear[i] + "\" value=\"" + studentFirstYear[i] + "\">");
+                  						out.println("<button class=\"PanelButton\" id=\"ExitButton\" onclick=\"this.parentElement.parentElement.removeChild(this.parentElement)\">X</button>");
                   						out.println(studentFirstYear[i]);
               							out.println("<ul>");
               								out.println("<li>Credits: " + creditVar + "</li>");
@@ -148,25 +181,41 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
-                  			}
                   			%>
             			</div>
             		</div>
-            		<div class="col-md-6" style="min-width: 300px;">
+            		<div class="col-sm-3" id="YearColumn">
             			Second Year Courses
             			<div class="courseCell" id="secondYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
-            				if(studentSecondYear != null) {
                   				for(int i=0; i < studentSecondYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentSecondYear[i]);
-                  					creditVar = courseInfoVar[4];
-                  					aokVar = courseInfoVar[5];
-                  					tagVar = courseInfoVar[6];
+                  					if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
+                  						creditVar = courseInfoVar[4];	
+                  					} else {
+                  						creditVar = "Not Available";
+                  					}
+                  					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
+                  						aokVar = courseInfoVar[5];	
+                  					} else {
+                  						aokVar = "No AoKs";
+                  					}
+                  					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
+                  						tagVar = courseInfoVar[6];	
+                  					} else {
+                  						tagVar = "No Tags";
+                  					}
+                  					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
+                  						preReqVar = courseInfoVar[8];	
+                  					} else {
+                  						preReqVar = "No Prerequisites";
+                  					}
                   			
                   			
-                  					out.println("<div class=\"CoursePanel\" id=\"" + studentSecondYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\">");
+                  					out.println("<div class=\"CoursePanel\" id=\"" + studentSecondYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"Prerequisites: " + preReqVar + "\">");
                   						//out.println("<input form=\"form_scheduler\" type=\"hidden\" name=\"" + studentSecondYear[i] + "\" value=\"" + studentSecondYear[i] + "\">");
+                  						out.println("<button class=\"PanelButton\" id=\"ExitButton\" onclick=\"this.parentElement.parentElement.removeChild(this.parentElement)\">X</button>");
                   						out.println(studentSecondYear[i]);
               							out.println("<ul>");
               								out.println("<li>Credits: " + creditVar + "</li>");
@@ -175,25 +224,41 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
-                  			}
                   			%>
             			</div>
             		</div>
-            		<div class="col-md-6" style="min-width: 300px;">
+            		<div class="col-sm-3" id="YearColumn">
             			Third Year Courses
             			<div class="courseCell" id="thirdYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
-            				if(studentThirdYear != null) {
                   				for(int i=0; i < studentThirdYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentThirdYear[i]);
-                  					creditVar = courseInfoVar[4];
-                  					aokVar = courseInfoVar[5];
-                  					tagVar = courseInfoVar[6];
+                  					if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
+                  						creditVar = courseInfoVar[4];	
+                  					} else {
+                  						creditVar = "Not Available";
+                  					}
+                  					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
+                  						aokVar = courseInfoVar[5];	
+                  					} else {
+                  						aokVar = "No AoKs";
+                  					}
+                  					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
+                  						tagVar = courseInfoVar[6];	
+                  					} else {
+                  						tagVar = "No Tags";
+                  					}
+                  					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
+                  						preReqVar = courseInfoVar[8];	
+                  					} else {
+                  						preReqVar = "No Prerequisites";
+                  					}
                   			
                   			
-                  					out.println("<div class=\"CoursePanel\" id=\"" + studentThirdYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\">");
+                  					out.println("<div class=\"CoursePanel\" id=\"" + studentThirdYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"Prerequisites: " + preReqVar + "\">");
                   						//out.println("<input form=\"form_scheduler\" type=\"hidden\" name=\"" + studentThirdYear[i] + "\" value=\"" + studentThirdYear[i] + "\">");
+                  						out.println("<button class=\"PanelButton\" id=\"ExitButton\" onclick=\"this.parentElement.parentElement.removeChild(this.parentElement)\">X</button>");
                   						out.println(studentThirdYear[i]);
               							out.println("<ul>");
               								out.println("<li>Credits: " + creditVar + "</li>");
@@ -202,25 +267,41 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
-                  			}
                   			%>
             			</div>
             		</div>
-            		<div class="col-md-6" style="min-width: 300px;">
+            		<div class="col-sm-3" id="YearColumn">
             			Fourth Year Courses
             			<div class="courseCell" id="fourthYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
-            				if(studentFourthYear != null) {
                   				for(int i=0; i < studentFourthYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentFourthYear[i]);
-                  					creditVar = courseInfoVar[4];
-                  					aokVar = courseInfoVar[5];
-                  					tagVar = courseInfoVar[6];
+                  					if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
+                  						creditVar = courseInfoVar[4];	
+                  					} else {
+                  						creditVar = "Not Available";
+                  					}
+                  					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
+                  						aokVar = courseInfoVar[5];	
+                  					} else {
+                  						aokVar = "No AoKs";
+                  					}
+                  					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
+                  						tagVar = courseInfoVar[6];	
+                  					} else {
+                  						tagVar = "No Tags";
+                  					}
+                  					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
+                  						preReqVar = courseInfoVar[8];	
+                  					} else {
+                  						preReqVar = "No Prerequisites";
+                  					}
                   			
                   			
-                  					out.println("<div class=\"CoursePanel\" id=\"" + studentFourthYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\">");
+                  					out.println("<div class=\"CoursePanel\" id=\"" + studentFourthYear[i] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"Prerequisites: " + preReqVar + "\">");
                   						//out.println("<input form=\"form_scheduler\" type=\"hidden\" name=\"" + studentFourthYear[i] + "\" value=\"" + studentFourthYear[i] + "\">");
+                  						out.println("<button class=\"PanelButton\" id=\"ExitButton\" onclick=\"this.parentElement.parentElement.removeChild(this.parentElement)\">X</button>");
                   						out.println(studentFourthYear[i]);
               							out.println("<ul>");
               								out.println("<li>Credits: " + creditVar + "</li>");
@@ -229,41 +310,36 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
-                  			}
                   			%>
             			</div>
             		</div>
           		</div>
         	</div>
-        	<div class="col-md-3">
-        		<input type="submit" value="Save Schedule"><br>
-        		<strong><u>Remaining Requirements</u></strong>
-        		<ul class="">
+        	<div class="col-md-3" style="word-wrap: break-word;">
         		<%
-                    String[] remainingCourses;
-                    out.println("<strong><u>Remaining Courses:</u></strong>");
-                  	
-      				if(studentRemainingCourses == null || studentRemainingCourses.isEmpty()) {
-       					out.println("<li>" + "No major courses unscheduled" + "</li>");
-       				}
-       				else {
-            			remainingCourses = studentRemainingCourses.split(", ");
-    					for(int i=0; i < remainingCourses.length; i++){
+        			String[] remainingCourses;
+        			out.println("<strong><u>Remaining Courses:</u></strong>");
+                	out.println("<ul>");
+  					if(studentRemainingCourses == null || studentRemainingCourses.isEmpty()) {
+  						out.println("<li>" + "No major courses unscheduled" + "</li>");
+  					}
+  					else {
+          				remainingCourses = studentRemainingCourses.split(", ");
+  						for(int i=0; i < remainingCourses.length; i++){
 							out.println("<li>" + remainingCourses[i] + "</li>");
-    					}
-       				}
+  						}
+  					}
+  					out.println("</ul>");
                   	out.println("<strong><u>Remaining Credits:</u></strong> " + studentRemainingCredits + "<br>");
   					out.println("<strong><u>Remaining Fields:</u></strong>");
-  					if(studentRemainingFields == null || studentRemainingFields.length == 0) {
-       					out.println("<li>" + "All requirements scheduled" + "</li>");
-       				}
-       				else {
-    					for(int i=0; i < studentRemainingFields.length; i++){
-							out.println("<li>" + studentRemainingFields[i] + "</li>");
-    					}
-       				}
+  					out.println("<ul>");
+  					for(int i=0; i < studentRemainingFields.length; i++){
+						if(studentRemainingFields[i] != null && !studentRemainingFields[i].isEmpty()) {
+							out.println("<li> " + studentRemainingFields[i] + "</li>");	
+						}
+					}
+					out.println("</ul>");
                  %>
-                </ul>
         	</div>
       	</div>
       	</form>
@@ -274,33 +350,40 @@
     		<h3>Course Catalog</h3>
         </div>
         <ul class="list-unstyled components">
-        	<li style="padding: 10px;">
-        		<form id="form_search" name="form_search" method="get" action="" class="form-inline">
-              		<div class="input-group">
-      					<input type="text" class="form-control" placeholder="Search Catalog...">
-      					<span class="input-group-btn">
-        					<button class="btn btn-secondary" type="button" style="background: #154073;">Search</button>
-      					</span>
-    				</div>
-           		</form>
-        	</li>
-        
         	<%
         		String[] majorIds = currUsrBeanId.getAllMajorsIds();
-        		for(int x=0; x < majorIds.length; x++) {
-        			majorCourses = currUsrBeanId.getIdcoursesByMajorId(majorIds[x]);
+    			for(int x=0; x < majorIds.length; x++) {
+    				majorCourses = currUsrBeanId.getIdcoursesByMajorId(majorIds[x]);
         			if(majorCourses[0] != null && !majorCourses[0].isEmpty()){
         				out.println("<li class=\"\">");
-        					out.println("<a href=\"#" + majors[x] + "Submenu\" data-toggle=\"collapse\" aria-expanded=\"false\" class=\"collapsed\">" + majors[x] + " Courses</a>");
+        					out.println("<a href=\"#" + majors[x] + "Submenu\" data-toggle=\"collapse\" aria-expanded=\"false\" class=\"collapsed\">" + majors[x] + " Major</a>");
         					out.println("<ul class=\"list-unstyled collapse\" id=\"" + majors[x] + "Submenu\" aria-expanded=\"false\" style=\"height: 0px;\">");
         						for(int y=0; y < majorCourses.length; y++){
         							courseInfoVar = currUsrBeanId.getCourseInfo(majorCourses[y]);
-                  					creditVar = courseInfoVar[4];
-                  					aokVar = courseInfoVar[5];
-                  					tagVar = courseInfoVar[6];
+        							if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
+                  						creditVar = courseInfoVar[4];	
+                  					} else {
+                  						creditVar = "Not Available";
+                  					}
+                  					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
+                  						aokVar = courseInfoVar[5];	
+                  					} else {
+                  						aokVar = "No AoKs";
+                  					}
+                  					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
+                  						tagVar = courseInfoVar[6];	
+                  					} else {
+                  						tagVar = "No Tags";
+                  					}
+                  					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
+                  						preReqVar = courseInfoVar[8];	
+                  					} else {
+                  						preReqVar = "No Prerequisites";
+                  					}
                   					out.println("<li><span>");
-                  						out.println("<div class=\"CoursePanel\" id=\"" + majorCourses[y] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\">");
+                  						out.println("<div class=\"CoursePanel\" id=\"" + majorCourses[y] + "\" draggable=\"true\" draggable=\"true\" ondragstart=\"drag(event)\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"Prerequisites: " + preReqVar + "\">");
                   							//out.println("<input form=\"form_scheduler\" type=\"hidden\" name=\"" + majorCourses[y] + "\" value=\"" + majorCourses[y] + "\">");
+                  							out.println("<button class=\"PanelButton\" id=\"ExitButton\" onclick=\"this.parentElement.parentElement.removeChild(this.parentElement)\">X</button>");
                   							out.println(majorCourses[y]);
               								out.println("<ul>");
               									out.println("<li>Credits: " + creditVar + "</li>");
@@ -318,8 +401,8 @@
       	</ul>
       	
       	<ul class="list-unstyled CTAs">
-        	<li><a href="#" class="download">Download source</a></li>
-        	<li><a href="#" class="article">Back to article</a></li>
+        	<li><a href="Catalog.jsp" class="download">View Full Catalog</a></li>
+        	<li><a href="Contact.jsp" class="article">Learn More</a></li>
        	</ul>
 	</nav>
     </div>  
@@ -368,12 +451,23 @@
 			  el.appendChild(document.getElementById(data));
 		}
 		
+		function deletePanel(ev, el) {
+			ev.preventDefault();
+			var parentPanel = document.el.parentElement.nodeName;
+			var grandParent = document.parentPanel.parentElement.nodeName;
+			grandParent.removeChild(parentPanel);
+		}
+		
 		$(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
                 $(this).toggleClass('active');
             });
         });
+		
+		$(document).ready(function(){
+		    $('[data-toggle="tooltip"]').tooltip();   
+		});
 		
 		function saveSchedule(ev) {
 			//ev.preventDefault();
@@ -392,43 +486,43 @@
 			    if(searchYearOne[i].tagName == 'DIV') {
 			    	matchesYearOne.push(searchYearOne[i].id);
 			    	if(scheduleString){
-			    		scheduleString += (", " + searchYearOne[i].id);
+			    		scheduleString += ("," + searchYearOne[i].id);
 			    	} else {
 			    		scheduleString = searchYearOne[i].id;
 			    	}
 			    }
 			}
 			
-			scheduleString += " | ";
+			scheduleString += "|";
 			for(var i = 0; i < searchYearTwo.length; i++) {
 			    if(searchYearOne[i].tagName == 'DIV') {
 			    	matchesYearTwo.push(searchYearTwo[i].id);
 			    	if(i > 0){
-			    		scheduleString += (", " + searchYearTwo[i].id);
+			    		scheduleString += ("," + searchYearTwo[i].id);
 			    	} else {
 			    		scheduleString += searchYearTwo[i].id;
 			    	}
 			    }
 			}
 			
-			scheduleString += " | ";
+			scheduleString += "|";
 			for(var i = 0; i < searchYearThree.length; i++) {
 			    if(searchYearThree[i].tagName == 'DIV') {
 			    	matchesYearThree.push(searchYearThree[i].id);
 			    	if(i > 0){
-			    		scheduleString += (", " + searchYearThree[i].id);
+			    		scheduleString += ("," + searchYearThree[i].id);
 			    	} else {
 			    		scheduleString += searchYearThree[i].id;
 			    	}
 			    }
 			}
 			
-			scheduleString += " | ";
+			scheduleString += "|";
 			for(var i = 0; i < searchYearFour.length; i++) {
 			    if(searchYearFour[i].tagName == 'DIV') {
 			    	matchesYearFour.push(searchYearFour[i].id);
 			    	if(i > 0){
-			    		scheduleString += (", " + searchYearFour[i].id);
+			    		scheduleString += ("," + searchYearFour[i].id);
 			    	} else {
 			    		scheduleString += searchYearFour[i].id;
 			    	}

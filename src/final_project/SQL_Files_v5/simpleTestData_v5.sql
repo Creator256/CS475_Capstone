@@ -33,15 +33,11 @@ INSERT INTO `advising_app`.`major`
 VALUES
 ('0', 'NA', 'Non-Major Course', NULL, NULL),
 
-('1', 'CS', 'Computer Science', 'CS-220, CS-255, CS-310, 
-CS-315, CS-318, CS-320, CS-360, CS-419, CS-420, CS-435, CS-475, 
-MTH-151, MTH-152, MTH-301', 14.00),
+('1', 'CS', 'Computer Science', 'CS-220, CS-255, CS-310, CS-315, CS-318, CS-320, CS-360, CS-419, CS-420, CS-435, CS-475, MTH-151, MTH-152, MTH-301', 14.00),
 
-('2', 'IS', 'Information Systems and Technology', 'CS-220, CS-205, CS-315, CS-360, CS-440, 
-IS-224, IS-380, IS-423, IS-424, IS-425, MTH-151, MTH-345, BUS-263, BUS-230', 14.00),
+('2', 'IS', 'Information Systems and Technology', 'CS-220, CS-205, CS-315, CS-360, CS-440, IS-224, IS-380, IS-423, IS-424, IS-425, MTH-151, MTH-345, BUS-263, BUS-230', 14.00),
 
-('3', 'CGE', 'Computer Gaming and Entertainment', 'CS-220, CS-255, CS-303, CS-418, CS-460, 
-CGE-350, CGE-355, CGE-357, CGE-401, CGE-405, CGE-425, CGE-477, MTH-151', 13.00),
+('3', 'CGE', 'Computer Gaming and Entertainment', 'CS-220, CS-255, CS-303, CS-418, CS-460, CGE-350, CGE-355, CGE-357, CGE-401, CGE-405, CGE-425, CGE-477, MTH-151', 13.00),
 
 ('4', 'MTH', 'Mathematics', NULL, NULL),
 
@@ -142,6 +138,11 @@ VALUES
 
 ('CS-205', 1, 'Linux', 'Half course Core topics include LINUX shell commands, shell scripts and related file systems. Several related topics such as file permission, process handling, sysadin tools, and the access of LINUX resources via application programs. Prequisite: CS 220 or one course covering a high-level programming language.', 
 0.50, NULL, NULL, NULL, '{ p: CS-220 }'),
+('CS-303', 1, 'Computer Game Design', 'Discusses game programming, use of audio and animation techniques, 2D and 3D graphics techniques, and design and game architecture. Rule playing and interaction in games is also covered. Prerequisites: CS 220 and trigonometry.', 
+1.00, NULL, NULL, NULL, '{ p: CS-220 }'),
+('CS-310', 1, 'Computr Org & Prog in Assembly', '	
+An in-depth study of computer hardware, from the logic gate level up through registers, and CPU devices. Primary and secondary memory and input/output, interrupts, and multiprocessor systems are discussed. Programming hardware using an assembler language is also present, and assembler features such as interrupts, internal and external subroutines, conditional assembly, real-time programming, and the macro language are covered. Prerequisite: CS 220.', 
+1.00, NULL, NULL, NULL, '{ p: CS-220 }'),
 ('CS-320', 1, 'Data Struct & Algorithmc Anlys', 'A coverage in great depth and detail of data structure concepts: stacks, queues, linked lists, binary and general trees, game trees, B trees, graphs, and sorting and searching techniques. Algorithms for developing and applying these structures are discussed in a systematic and logical manner. Other topics are abstract data types, information hiding, and object-oriented programming. Prerequisites: CS 255, CS 318, and MTH 301 or concurrent enrollment.', 
 1.00, NULL, 'QuantitativeReasoning', NULL, '{ p: CS-255 && CS-318, && MTH-301 } || { c: CS-255 && CS-318, && MTH-301 }'), -- Take CS-255 && CS-318 previously, and MTH-301 previously or concurrently
 ('CS-360', 1, 'Computer Network Systems', 'Theory of a computer network is presented and various types of networks, including local area, wide area, and global networks, are discussed. Theory topics include network architecture, data transmission techniques, network topologies, network media, and network security. In addition, the student learns how to use network operating systems and how to generate programs for a system such as the Internet using JAVA and HTML programming tools. Case studies of Windows NT, Novell, the Internet, and intranet systems are given. Prerequisite: CS 220 or IT 228.', 
@@ -196,8 +197,6 @@ INSERT INTO `advising_app`.`course`
 `other`,
 `prequisites`)
 VALUES
-('CGE-301', 3, 'Computer Game Design', NULL, 
-1.00, NULL, NULL, NULL, '{ p: CS-220 }'),
 ('CGE-350', 3, 'Adv Computer Graphics', 'Emphasis is placed on 3-D graphics and various toolkits used to create this type of graphics such as Direct-X. Rendering of solid objects, life forms, fractal scenes and objects, terrains, 3-D modeling, lighting and shadowing, texturing, and other topics are discussed. Prerequisite: CS 220.', 
 1.00, NULL, NULL, NULL, '{ p: CS-220 }'),
 ('CGE-355', 3, 'Computer Animation and Simulation', NULL, 

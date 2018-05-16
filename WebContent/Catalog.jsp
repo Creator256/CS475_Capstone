@@ -160,10 +160,10 @@
 		makeSortable(document.getElementById('coursesTable'));
 	}
 	document.addEventListener('DOMContentLoaded',function() {
-	    document.querySelector('input[id="searchStringInput"]').onkeyup=changeEventHandler2;
+	    document.querySelector('input[id="searchStringInput"]').onkeyup=filterSearchCourses;
 	},false);
 	
-	function changeEventHandler2(event) {
+	function filterSearchCourses(event) {
 		//console.log(event.target.value);
 		var rows =  document.getElementById("coursesTable").rows;
 		let searchLowerCase = event.target.value.toLowerCase();
@@ -174,7 +174,7 @@
 			}
 		}
 		else {
-			for(var i = 0; i < rows.length; i++) {
+			for(var i = 1; i < rows.length; i++) {
 				//console.log(i);
 				var cells = rows[i].cells;
 				var id = "#row" + i;

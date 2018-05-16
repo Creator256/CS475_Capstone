@@ -44,44 +44,46 @@ public class Student {
 	}
 	
 	public void init(String eNumber, String fName, String lName, DBBean bean) {
-		System.out.println("INIT STUDENT");
+		//System.out.println("INIT STUDENT");
 		studentBean = new DBBean();
 		studentBean.InitConnection();
 		this.eNumber = eNumber;
 		firstName = fName;
 		lastName = lName;
+		initStudentMajor(bean);
 		try {
-			
 			PreparedStatement ps = bean.getConnection().prepareStatement("select * from schedule where eNumberStudent = ?");
 			ps.setString(1, eNumber);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
 				String classes = rs.getString("courses");
-				System.out.println(classes);
-				schedulerClasses = classes.split(Pattern.quote("|"));
-				yearOneClasses = schedulerClasses[0].split(",");
-				yearTwoClasses = schedulerClasses[1].split(",");
-				yearThreeClasses = schedulerClasses[2].split(",");
-				yearFourClasses = schedulerClasses[3].split(",");
-				initStudentMajor(bean);
+				//System.out.println(classes);
+				schedulerClasses = classes.split(Pattern.quote(" | "));
+				if(schedulerClasses!= null && schedulerClasses.length > 0) {
+					yearOneClasses = schedulerClasses[0].split(", ");
+					if(schedulerClasses.length > 1) yearTwoClasses = schedulerClasses[1].split(", ");
+					if(schedulerClasses.length > 2) yearThreeClasses = schedulerClasses[2].split(", ");
+					if(schedulerClasses.length > 3) yearFourClasses = schedulerClasses[3].split(", ");
+				}
 			}
 			else {
 				System.out.println("Can't find a schedule for this student");
 			}
 			ps.close();
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 	}
 	
 	public void initStudentMajor(DBBean bean) {
+		//System.out.println("INIT initStudentMajor");
 		try {
 			PreparedStatement ps = bean.getConnection().prepareStatement("select idMajor from student where eNumberStudent = ?");
 			ps.setString(1, eNumber);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				String studentMajorID = rs.getString("idMajor");
-				System.out.println(studentMajorID);
+				String studentMajorID = Integer.toString(rs.getInt("idMajor"));
+				//System.out.println(studentMajorID);
 				majorID = studentMajorID;
 				try {
 					PreparedStatement ps2 = bean.getConnection().prepareStatement("select abbreviation from major where idMajor = ?");
@@ -89,7 +91,7 @@ public class Student {
 					ResultSet rs2 = ps2.executeQuery();
 					if(rs2.next()) {
 						String studentMajor = rs2.getString("abbreviation");
-						System.out.println(studentMajor);
+						//System.out.println(studentMajor);
 						major = studentMajor;
 					}
 					else {
@@ -114,15 +116,19 @@ public class Student {
 			ps.setString(1, courseID);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				courseInfo[0] = rs.getString(1);
-				courseInfo[1] = Integer.toString(rs.getInt(2));
-				courseInfo[2] = rs.getString(3);
-				courseInfo[3] = rs.getString(4);
-				courseInfo[4] = Double.toString(rs.getDouble(5));
-				courseInfo[5] = rs.getString(6);
-				courseInfo[6] = rs.getString(7);
-				courseInfo[7] = rs.getString(8);
-				courseInfo[8] = rs.getString(9);
+				courseInfo[0] = rs.getString(1); 				// idcourse
+				courseInfo[1] = Integer.toString(rs.getInt(2)); // idmajor
+				courseInfo[2] = rs.getString(3); 				// course
+				courseInfo[3] = rs.getString(4); 				// description
+				courseInfo[4] = Double.toString(rs.getDouble(5));//credit
+				courseInfo[5] = rs.getString(6); 				// aoks
+				courseInfo[6] = rs.getString(7); 				// tags
+				courseInfo[7] = rs.getString(8); 				// other
+				courseInfo[8] = rs.getString(9); 				// prequisites
+				//System.out.print(courseID + ": ");
+				//for(int i = 1; i < 3; i++ ) System.out.print(courseInfo[i] + "\t\t");
+				//for(int i = 4; i < 9; i++ ) System.out.print(courseInfo[i] + "\t\t");
+				//System.out.println("");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -134,46 +140,60 @@ public class Student {
 	public String getRemainingCourses() {
 		String[] majorRequirements;
 		String[] metRequirements;
-		String remainingRequirements = "";
+		String remainingRequirements = null;
+		//System.out.println("\n\nMY MAJOR FOLKS!!!!!!: " + major);
 		try {	
 			PreparedStatement ps = studentBean.getConnection().prepareStatement("select required_course_ids from major where abbreviation = ?");
 			ps.setString(1, major);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
 				String classes = rs.getString(1);
-				System.out.println(classes);
+				//System.out.print("required courses met: ");
+				//if(classes == null) System.out.println("classes is null!");
+				//else System.out.println(classes + "\n");
+				
 				if (classes != null && !classes.isEmpty()) {
-					majorRequirements = classes.split(",");
+					majorRequirements = classes.split(", ");
 					metRequirements = new String[majorRequirements.length];
 					for(int x = 0; x < majorRequirements.length; x++) {
-						for(int y = 0; y < yearOneClasses.length; y++) {
-							if(majorRequirements[x].equals(yearOneClasses[y])) {
-								metRequirements[x] = majorRequirements[x];
+						if(yearOneClasses != null) {
+							for(int y = 0; y < yearOneClasses.length; y++) {
+								if(majorRequirements[x].equals(yearOneClasses[y])) {
+									metRequirements[x] = majorRequirements[x];
+								}
 							}
 						}
-						for(int y = 0; y < yearTwoClasses.length; y++) {		
-							if(majorRequirements[x].equals(yearTwoClasses[y])) {
-								metRequirements[x] = majorRequirements[x];
+						if(yearTwoClasses != null) {
+							for(int y = 0; y < yearTwoClasses.length; y++) {		
+								if(majorRequirements[x].equals(yearTwoClasses[y])) {
+									metRequirements[x] = majorRequirements[x];
+								}
 							}
 						}
-						for(int y = 0; y < yearThreeClasses.length; y++) {	
-							if(majorRequirements[x].equals(yearThreeClasses[y])) {
-								metRequirements[x] = majorRequirements[x];
+						if(yearThreeClasses != null) {
+							for(int y = 0; y < yearThreeClasses.length; y++) {	
+								if(majorRequirements[x].equals(yearThreeClasses[y])) {
+									metRequirements[x] = majorRequirements[x];
+								}
 							}
 						}
-						for(int y = 0; y < yearFourClasses.length; y++) {
-							if(majorRequirements[x].equals(yearFourClasses[y])) {
-								metRequirements[x] = majorRequirements[x];
+						if(yearFourClasses != null) {
+							for(int y = 0; y < yearFourClasses.length; y++) {
+								if(majorRequirements[x].equals(yearFourClasses[y])) {
+									metRequirements[x] = majorRequirements[x];
+								}
 							}
 						}
 					}
 					for(int x = 0; x < metRequirements.length; x++) {
-						if(!(metRequirements[x] != null && !metRequirements[x].isEmpty()) && (remainingRequirements != null && !remainingRequirements.isEmpty())) {
-							remainingRequirements = remainingRequirements + "," + majorRequirements[x];
+						if(!(metRequirements[x] != null && !metRequirements[x].isEmpty()) && (remainingRequirements != null)) {
+							remainingRequirements += ", " + majorRequirements[x];
 						} else if(!(metRequirements[x] != null && !metRequirements[x].isEmpty())) {
 							remainingRequirements = majorRequirements[x];
 						}
+						//System.out.println("\t" + metRequirements[x] + ": " + remainingRequirements);
 					}
+					System.out.println("");
 				} else {
 					String nullCourses = "";
 					return nullCourses;
@@ -183,7 +203,7 @@ public class Student {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("REMAINING: " + remainingRequirements);
+		//System.out.println("REMAINING: " + remainingRequirements);
 		return remainingRequirements;
 	}
 	
@@ -193,60 +213,74 @@ public class Student {
 		String[] courseInfo;
 		String remainingFields = "";
 		try {	
-			PreparedStatement ps = studentBean.getConnection().prepareStatement("select AoKsTagsProficiencyAndOther from graduationrequirement where idgradrequirement = ?");
-			ps.setString(1, majorID);
+			PreparedStatement ps = studentBean.getConnection().prepareStatement("select AoKsTagsProficiencyAndOther from graduationrequirement");
+			//ps.setString(1, majorID);
 			ResultSet rs = ps.executeQuery();
+			
+//			PreparedStatement ps2 = studentBean.getConnection().prepareStatement("select AoKsTagsProficiencyAndOther from graduationrequirement");
+//			ResultSet rs2 = ps.executeQuery();
+//			
 			if(rs.next()) {
 				String fields = rs.getString(1);
 				System.out.println(fields);
 				if (fields != null && !fields.isEmpty()) {
-					generalFields = fields.split(",");
+					generalFields = fields.split(", ");
 					metFields = new String[generalFields.length];
 					for(int x = 0; x < generalFields.length; x++) {
-						for(int y = 0; y < yearOneClasses.length; y++) {
-							courseInfo = getCourseInfo(yearOneClasses[y]);
-							if((courseInfo[5] != null && !courseInfo[5].isEmpty()) || (courseInfo[6] != null && !courseInfo[6].isEmpty())) {
-								if(generalFields[x].equals(courseInfo[5])) {
+						if(yearOneClasses != null) {
+							for(int y = 0; y < yearOneClasses.length; y++) {
+								courseInfo = getCourseInfo(yearOneClasses[y]);
+								if((courseInfo[5] != null && !courseInfo[5].isEmpty()) && courseInfo[5].contains(generalFields[x])) {
 									metFields[x] = generalFields[x];
-								} else if(generalFields[x].equals(courseInfo[6])) {
+								} else if((courseInfo[6] != null && !courseInfo[6].isEmpty()) && courseInfo[6].contains(generalFields[x])) {
 									metFields[x] = generalFields[x];
-								}
-							}
-						}
-						for(int y = 0; y < yearTwoClasses.length; y++) {
-							courseInfo = getCourseInfo(yearTwoClasses[y]);
-							if((courseInfo[5] != null && !courseInfo[5].isEmpty()) || (courseInfo[6] != null && !courseInfo[6].isEmpty())) {
-								if(generalFields[x].equals(courseInfo[5])) {
-									metFields[x] = generalFields[x];
-								} else if(generalFields[x].equals(courseInfo[6])) {
+								} else if((courseInfo[7] != null && !courseInfo[7].isEmpty()) && courseInfo[7].contains(generalFields[x])) {
 									metFields[x] = generalFields[x];
 								}
 							}
 						}
-						for(int y = 0; y < yearThreeClasses.length; y++) {
-							courseInfo = getCourseInfo(yearThreeClasses[y]);
-							if((courseInfo[5] != null && !courseInfo[5].isEmpty()) || (courseInfo[6] != null && !courseInfo[6].isEmpty())) {
-								if(generalFields[x].equals(courseInfo[5])) {
+						if(yearTwoClasses != null) {
+							for(int y = 0; y < yearTwoClasses.length; y++) {
+								courseInfo = getCourseInfo(yearTwoClasses[y]);
+								if((courseInfo[5] != null && !courseInfo[5].isEmpty()) && courseInfo[5].contains(generalFields[x])) {
 									metFields[x] = generalFields[x];
-								} else if(generalFields[x].equals(courseInfo[6])) {
+								} else if((courseInfo[6] != null && !courseInfo[6].isEmpty()) && courseInfo[6].contains(generalFields[x])) {
 									metFields[x] = generalFields[x];
-								}
-							}
-						}
-						for(int y = 0; y < yearFourClasses.length; y++) {
-							courseInfo = getCourseInfo(yearFourClasses[y]);
-							if((courseInfo[5] != null && !courseInfo[5].isEmpty()) || (courseInfo[6] != null && !courseInfo[6].isEmpty())) {
-								if(generalFields[x].equals(courseInfo[5])) {
-									metFields[x] = generalFields[x];
-								} else if(generalFields[x].equals(courseInfo[6])) {
+								} else if((courseInfo[7] != null && !courseInfo[7].isEmpty()) && courseInfo[7].contains(generalFields[x])) {
 									metFields[x] = generalFields[x];
 								}
 							}
 						}
-					}
+						if(yearThreeClasses != null) {
+							for(int y = 0; y < yearThreeClasses.length; y++) {
+								courseInfo = getCourseInfo(yearThreeClasses[y]);
+								if((courseInfo[5] != null && !courseInfo[5].isEmpty()) && courseInfo[5].contains(generalFields[x])) {
+									metFields[x] = generalFields[x];
+								} else if((courseInfo[6] != null && !courseInfo[6].isEmpty()) && courseInfo[6].contains(generalFields[x])) {
+									metFields[x] = generalFields[x];
+								} else if((courseInfo[7] != null && !courseInfo[7].isEmpty()) && courseInfo[7].contains(generalFields[x])) {
+									metFields[x] = generalFields[x];
+								}
+							}
+						}
+						if(yearFourClasses != null) {
+							for(int y = 0; y < yearFourClasses.length; y++) {
+								courseInfo = getCourseInfo(yearFourClasses[y]);
+								if((courseInfo[5] != null && !courseInfo[5].isEmpty()) && courseInfo[5].contains(generalFields[x])) {
+									metFields[x] = generalFields[x];
+								} else if((courseInfo[6] != null && !courseInfo[6].isEmpty()) && courseInfo[6].contains(generalFields[x])) {
+									metFields[x] = generalFields[x];
+								} else if((courseInfo[7] != null && !courseInfo[7].isEmpty()) && courseInfo[7].contains(generalFields[x])) {
+									metFields[x] = generalFields[x];
+								}
+							}
+						}
+					} // end for each generalField
+					
+					
 					for(int x = 0; x < metFields.length; x++) {
-						if(!(metFields[x] != null && !metFields[x].isEmpty()) && (remainingFields != null && !remainingFields.isEmpty())) {
-							remainingFields = remainingFields + "," + generalFields[x];
+						if(!(metFields[x] != null && !metFields[x].isEmpty()) && (remainingFields != null)) {
+							remainingFields = remainingFields + ", " + generalFields[x];
 						} else if(!(metFields[x] != null && !metFields[x].isEmpty())) {
 							remainingFields = generalFields[x];
 						}
@@ -260,8 +294,66 @@ public class Student {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("REMAINING FIELDS: " + remainingFields);
-		return remainingFields.split(",");
+		//System.out.println("REMAINING FIELDS: " + remainingFields);
+		return remainingFields.split(", ");
+	}
+	
+	
+	public double getRemainingCredits() {
+		double creditsTaken = 0.0;
+		double neededCredits = 0.0;
+		double remainingCredits = 0.0;
+		String[] courseInfo = null;
+		if(yearOneClasses != null) {
+			for(int y = 0; y < yearOneClasses.length; y++) {
+				courseInfo = getCourseInfo(yearOneClasses[y]);
+				if(courseInfo[4] != null) {
+					creditsTaken += Double.parseDouble(courseInfo[4]);
+				}
+			}
+		}
+		if(yearTwoClasses != null) {
+			for(int i = 0; i < 3; i++ ) System.out.print(i + "\t");
+			for(int i = 4; i < 9; i++ ) System.out.print(i + "\t");
+			System.out.println("");
+			for(int y = 0; y < yearTwoClasses.length; y++) {
+				courseInfo = getCourseInfo(yearTwoClasses[y]);
+				System.out.println("yearTWO: " + yearTwoClasses[y] + "yearTWO::: " + courseInfo[4]);
+				if(courseInfo[4] != null) {
+					creditsTaken += Double.parseDouble(courseInfo[4]);
+				}
+				
+			}
+		}
+		if(yearThreeClasses != null) {
+			for(int y = 0; y < yearThreeClasses.length; y++) {
+				courseInfo = getCourseInfo(yearThreeClasses[y]);
+				if(courseInfo[4] != null) {
+					creditsTaken += Double.parseDouble(courseInfo[4]);
+				}
+			}
+		}
+		if(yearFourClasses != null) {
+			for(int y = 0; y < yearFourClasses.length; y++) {
+				courseInfo = getCourseInfo(yearFourClasses[y]);
+				if(courseInfo[4] != null) {
+					creditsTaken += Double.parseDouble(courseInfo[4]);
+				}
+			}
+		}
+		try {
+			PreparedStatement ps = studentBean.getConnection().prepareStatement("select graduationcredits from graduationrequirement");
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				neededCredits = rs.getDouble(1);
+				remainingCredits =  neededCredits - creditsTaken;
+				return remainingCredits;
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return remainingCredits;
 	}
 	
 	public String[] getYearOneClasses() {

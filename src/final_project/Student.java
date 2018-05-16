@@ -50,9 +50,12 @@ public class Student {
 		this.eNumber = eNumber;
 		firstName = fName;
 		lastName = lName;
+		getStudentSchedule();
+	}
+	
+	public void getStudentSchedule() {
 		try {
-			
-			PreparedStatement ps = bean.getConnection().prepareStatement("select * from schedule where eNumberStudent = ?");
+			PreparedStatement ps = studentBean.getConnection().prepareStatement("select * from schedule where eNumberStudent = ?");
 			ps.setString(1, eNumber);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
@@ -63,17 +66,15 @@ public class Student {
 				yearTwoClasses = schedulerClasses[1].split(",");
 				yearThreeClasses = schedulerClasses[2].split(",");
 				yearFourClasses = schedulerClasses[3].split(",");
-				initStudentMajor(bean);
+				initStudentMajor(studentBean);
 			}
 			else {
 				System.out.println("Can't find a schedule for this student");
 			}
-			ps.close();
 		} catch (Exception e) {
 			
 		}
-	}
-	
+	}	
 	public void initStudentMajor(DBBean bean) {
 		try {
 			PreparedStatement ps = bean.getConnection().prepareStatement("select idMajor from student where eNumberStudent = ?");

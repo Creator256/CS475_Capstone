@@ -22,6 +22,8 @@
   </head>
 
   <body>
+  	<%	if(currUsrBeanId.isLoggedIn()){ %>
+  	
 	<%
     	String fullName = currUsrBeanId.getName();
     	String eNumber = currUsrBeanId.getENumber();
@@ -194,5 +196,8 @@
 	
 	window.onload = function () {makeAllSortable();};
 	</script>
+	
+	<% } else { %>
+	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 </body>
 </html>

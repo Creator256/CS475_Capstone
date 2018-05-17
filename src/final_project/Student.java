@@ -109,6 +109,7 @@ public class Student {
 	
 
 	public String getAdvisor() {
+		fetchAdvisor();
 		return advisor;
 	}
 	

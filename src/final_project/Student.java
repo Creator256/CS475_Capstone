@@ -86,15 +86,37 @@ public class Student {
 				String classes = rs.getString("courses");
 				//System.out.println(classes);
 				schedulerClasses = classes.split(Pattern.quote(" | "));
-
+								
 				if(schedulerClasses!= null && schedulerClasses.length > 0) {
 
 					if(schedulerClasses != null && schedulerClasses.length > 0) {
 	
-						yearOneClasses = schedulerClasses[0].split(", ");
-						if(schedulerClasses.length > 1) yearTwoClasses = schedulerClasses[1].split(", ");
-						if(schedulerClasses.length > 2) yearThreeClasses = schedulerClasses[2].split(", ");
-						if(schedulerClasses.length > 3) yearFourClasses = schedulerClasses[3].split(", ");
+						if(schedulerClasses.length > 0) {
+							yearOneClasses = schedulerClasses[0].split(", ");
+						}
+						else {
+							yearOneClasses = null;
+						}
+						if(schedulerClasses.length > 1) {
+							yearTwoClasses = schedulerClasses[1].split(", ");
+						}
+						else {
+							yearTwoClasses = null;
+						}
+						
+						if(schedulerClasses.length > 2) {
+							yearThreeClasses = schedulerClasses[2].split(", ");
+						}
+						else {
+							yearThreeClasses = null;
+						}
+						
+						if(schedulerClasses.length > 3) {
+							yearFourClasses = schedulerClasses[3].split(", ");
+						}
+						else {
+							yearFourClasses = null;
+						}
 					}
 				}
 			}
@@ -391,7 +413,6 @@ public class Student {
 				remainingCredits =  neededCredits - creditsTaken;
 				return remainingCredits;
 			}
-			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

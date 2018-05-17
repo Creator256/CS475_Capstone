@@ -36,6 +36,7 @@
 		String studentName = currUsrBeanId.getStudent().getFirstName() + " " + currUsrBeanId.getStudent().getLastName();
 		String studentNumber = currUsrBeanId.getStudent().getENumber();
 		String studentAdvisor = currUsrBeanId.getStudent().getAdvisor();
+		currUsrBeanId.getStudent().getStudentSchedule();
 		String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
 		String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
 		String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();

@@ -289,8 +289,6 @@ public class User {
 				allCourseInfo[i][8] = rs.getString(9);
 				i++;
 			}
-			rs.close();
-			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -338,8 +336,6 @@ public class User {
 				allCourseInfo[i][8] = rs.getString(9);
 				i++;
 			}
-			rs.close();
-			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

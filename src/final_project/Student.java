@@ -28,19 +28,21 @@ public class Student {
 	}
 	
 	public Student(String eNum, DBBean bean) {
+		String fName = "";
+		String lName = "";
 		try {
 			PreparedStatement ps = bean.getConnection().prepareStatement("select * from person where eNumber = ?");
-			ps.setString(1, eNumber);
+			ps.setString(1, eNum);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				firstName = rs.getString("FirstName");
-				lastName = rs.getString("LastName");
+				fName = rs.getString("FirstName");
+				lName = rs.getString("LastName");
 			}
 		}
 		catch (Exception e) {
 
 		}
-		init(eNum, firstName, lastName, bean);
+		init(eNum, fName, lName, bean);
 	}
 	
 	public void init(String eNumber, String fName, String lName, DBBean bean) {
@@ -76,7 +78,6 @@ public class Student {
 	}
 	
 	public void getStudentSchedule() {
-
 		try {
 			PreparedStatement ps = studentBean.getConnection().prepareStatement("select * from schedule where eNumberStudent = ?");
 			ps.setString(1, eNumber);
@@ -354,9 +355,9 @@ public class Student {
 			}
 		}
 		if(yearTwoClasses != null) {
-			for(int i = 0; i < 3; i++ ) System.out.print(i + "\t");
-			for(int i = 4; i < 9; i++ ) System.out.print(i + "\t");
-			System.out.println("");
+			//for(int i = 0; i < 3; i++ ) //System.out.print(i + "\t");
+			//for(int i = 4; i < 9; i++ ) //System.out.print(i + "\t");
+			//System.out.println("");
 			for(int y = 0; y < yearTwoClasses.length; y++) {
 				courseInfo = getCourseInfo(yearTwoClasses[y]);
 				if(courseInfo[4] != null) {

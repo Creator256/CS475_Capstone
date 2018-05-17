@@ -26,10 +26,19 @@
   </head>
 
   <body>
+  	<%			
+	  	response.setHeader("Cache-Control","no-cache"); 
+		response.setHeader("Cache-Control","no-store"); 
+		response.setDateHeader("Expires", -1);
+		response.setHeader("Pragma","no-cache"); 
+	%>
+	
+  	<%	if(currUsrBeanId.isLoggedIn()){ %>
 	<%
-		String studentName = currUsrBeanId.getStudent().getFirstName();
+		String studentName = currUsrBeanId.getStudent().getFirstName() + " " + currUsrBeanId.getStudent().getLastName();
 		String studentNumber = currUsrBeanId.getStudent().getENumber();
 		String studentAdvisor = currUsrBeanId.getStudent().getAdvisor();
+		currUsrBeanId.getStudent().getStudentSchedule();
 		String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
 		String[] studentSecondYear = currUsrBeanId.getStudent().getYearTwoClasses();
 		String[] studentThirdYear = currUsrBeanId.getStudent().getYearThreeClasses();
@@ -37,9 +46,9 @@
 		String studentMajorID = currUsrBeanId.getStudent().getMajorID();
 		String studentMajor = currUsrBeanId.getStudent().getMajor();
 		String studentRemainingCourses = currUsrBeanId.getStudent().getRemainingCourses();
-		System.out.println("DASHBOARD REMAINING COURSES: " + studentRemainingCourses);
+		//System.out.println("DASHBOARD REMAINING COURSES: " + studentRemainingCourses);
 		double studentRemainingCredits = currUsrBeanId.getStudent().getRemainingCredits();
-		System.out.println("DASHBOARD REMAINING CREDITS: " + studentRemainingCredits);
+		//System.out.println("DASHBOARD REMAINING CREDITS: " + studentRemainingCredits);
 		String[] studentRemainingFields = currUsrBeanId.getStudent().getRemainingGeneralFields();
 
 		String[] courseInfoVar;
@@ -407,11 +416,6 @@
         		}
         	%>
       	</ul>
-      	
-      	<ul class="list-unstyled CTAs">
-        	<li><a href="Catalog.jsp" class="download">View Full Catalog</a></li>
-        	<li><a href="Contact.jsp" class="article">Learn More</a></li>
-       	</ul>
 	</nav>
     </div>  
     </main>
@@ -494,43 +498,43 @@
 			    if(searchYearOne[i].tagName == 'DIV') {
 			    	matchesYearOne.push(searchYearOne[i].id);
 			    	if(scheduleString){
-			    		scheduleString += ("," + searchYearOne[i].id);
+			    		scheduleString += (", " + searchYearOne[i].id);
 			    	} else {
 			    		scheduleString = searchYearOne[i].id;
 			    	}
 			    }
 			}
 			
-			scheduleString += "|";
+			scheduleString += " | ";
 			for(var i = 0; i < searchYearTwo.length; i++) {
 			    if(searchYearOne[i].tagName == 'DIV') {
 			    	matchesYearTwo.push(searchYearTwo[i].id);
 			    	if(i > 0){
-			    		scheduleString += ("," + searchYearTwo[i].id);
+			    		scheduleString += (", " + searchYearTwo[i].id);
 			    	} else {
 			    		scheduleString += searchYearTwo[i].id;
 			    	}
 			    }
 			}
 			
-			scheduleString += "|";
+			scheduleString += " | ";
 			for(var i = 0; i < searchYearThree.length; i++) {
 			    if(searchYearThree[i].tagName == 'DIV') {
 			    	matchesYearThree.push(searchYearThree[i].id);
 			    	if(i > 0){
-			    		scheduleString += ("," + searchYearThree[i].id);
+			    		scheduleString += (", " + searchYearThree[i].id);
 			    	} else {
 			    		scheduleString += searchYearThree[i].id;
 			    	}
 			    }
 			}
 			
-			scheduleString += "|";
+			scheduleString += " | ";
 			for(var i = 0; i < searchYearFour.length; i++) {
 			    if(searchYearFour[i].tagName == 'DIV') {
 			    	matchesYearFour.push(searchYearFour[i].id);
 			    	if(i > 0){
-			    		scheduleString += ("," + searchYearFour[i].id);
+			    		scheduleString += (", " + searchYearFour[i].id);
 			    	} else {
 			    		scheduleString += searchYearFour[i].id;
 			    	}
@@ -541,6 +545,7 @@
 		}
 		
     </script>
-
+    <% } else { %>
+	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 </body>
 </html>

@@ -16,6 +16,8 @@ public class User {
 	private Advisor advisor;
 	private DBBean dbbean;
 	
+	private boolean failedLogin = false;
+	
 	private String[] majorCourses;
 	private String[][] allCourseInfo;
 
@@ -23,8 +25,8 @@ public class User {
 	public boolean Login() {
 		boolean stat = false;
 		try {
-			System.out.println(eNumber);
-			System.out.println(password);
+			//System.out.println(eNumber);
+			//System.out.println(password);
 			dbbean = new DBBean();
 			dbbean.InitConnection();
 			PreparedStatement ps = dbbean.getConnection().prepareStatement("select * from person where eNumber = ? and password = ?");
@@ -77,8 +79,15 @@ public class User {
 	}
 	
 	public void setSchedule(String schedule) {
-		System.out.println("inside setSchedule!!!");
-		//set the user's schedule in the Database
+		try {
+			PreparedStatement ps = dbbean.getConnection().prepareStatement("update advising_app.schedule set courses = ? where eNumberStudent = ?");
+			ps.setString(1, schedule);
+			ps.setString(2, student.getENumber());
+			ps.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean isStudent() {
@@ -113,6 +122,14 @@ public class User {
 		return advisor;
 	}
 	
+	public void setFailedLogin(boolean stat) {
+		failedLogin = stat;
+	}
+	
+	public boolean getFailedLogin() {
+		return failedLogin;
+	}
+	
 	public String[] getAllMajorsAbbreviations() {
 		String[] majors = null;
 		try {
@@ -121,7 +138,7 @@ public class User {
 			int i = 0;
 			
 			rs.last();
-			System.out.println(rs.getRow());
+			//System.out.println(rs.getRow());
 			majors = new String[rs.getRow()];
 			rs.beforeFirst();
 			while(rs.next()) {
@@ -143,7 +160,7 @@ public class User {
 			int i = 0;
 			
 			rs.last();
-			System.out.println(rs.getRow());
+			//System.out.println(rs.getRow());
 			majors = new String[rs.getRow()];
 			rs.beforeFirst();
 			while(rs.next()) {
@@ -158,13 +175,13 @@ public class User {
 	
 	public String[] getMajorCourses(String majorAbb) {
 		try {
-			System.out.println(majorAbb);
+			//System.out.println(majorAbb);
 			PreparedStatement ps = dbbean.getConnection().prepareStatement("select required_course_ids from major where abbreviation = ?");
 			ps.setString(1, majorAbb);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
 				String classes = rs.getString(1);
-				System.out.println(classes);
+				//System.out.println(classes);
 				if (classes != null && !classes.isEmpty()) {
 					majorCourses = classes.split(", ");
 				} else {

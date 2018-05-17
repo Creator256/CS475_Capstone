@@ -41,18 +41,20 @@
 		<form action="ProcessLogin.jsp" >
 			<div  align="center">
 				<label style="desplay:inline-block; width:9%"><b>ENumbers</b></label>
-				<input type="text" placeholder="Your ENumber" name="user" value="e0011111">
+				<input type="text" placeholder="Your ENumber" name="user">
 			</div>
 			<div align="center">	
 				<label style="desplay:inline-block; width:9%; "><b>Password</b></label>
-				<input type="password" placeholder="Your Password" name="pass" value="123456">
+				<input type="password" placeholder="Your Password" name="pass">
 			</div>
 			<div align="center">
 				<input type="submit" value="Login" button type="button" class="btn btn-primary" style="background-color:#0c2340;"></button>
 			</div>
 		</form>
 	</div>
-
+	<%if(currUsrBeanId.getFailedLogin()){%>
+		<h6 style="color:red;" align="center">Invalid username and/or password</h6>	
+	<%}%>
 
 
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

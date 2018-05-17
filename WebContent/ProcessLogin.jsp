@@ -17,6 +17,7 @@
 			currUsrBeanId.setPassword(request.getParameter("pass"));
 			boolean status = currUsrBeanId.Login();
 			if(status){
+				currUsrBeanId.setFailedLogin(false);
 				if(currUsrBeanId.isStudent()){
     		 		response.sendRedirect("http://localhost:8080/Capstone_Final/Dashboard.jsp");
 				}
@@ -26,6 +27,7 @@
 			}
 			else{
 				System.out.println("log in failed");
+				currUsrBeanId.setFailedLogin(true);
 		 		response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");
 			}
 		%>

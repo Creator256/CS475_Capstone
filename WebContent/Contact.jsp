@@ -22,6 +22,13 @@
   </head>
 
   <body>
+   	<%			
+	  	response.setHeader("Cache-Control","no-cache"); 
+		response.setHeader("Cache-Control","no-store"); 
+		response.setDateHeader("Expires", -1);
+		response.setHeader("Pragma","no-cache"); 
+	%>
+    <%	if(currUsrBeanId.isLoggedIn()){ %>
   	<% String studentName = currUsrBeanId.getName(); %>
     <nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
@@ -149,6 +156,7 @@
     	  document.getElementsById("defaultOpen").style.visibility = "block";
     	}
     </script>
-
+    <% } else { %>
+	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 </body>
 </html>

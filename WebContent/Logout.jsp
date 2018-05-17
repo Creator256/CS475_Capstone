@@ -10,8 +10,9 @@
 	<body>
 		<%
 			currUsrBeanId.setLoggedIn(false);
+			request.getSession().invalidate();
  			response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");
-			session.invalidate();
+
 		%>
 	</body>
 </html>

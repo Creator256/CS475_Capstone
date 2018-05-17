@@ -23,8 +23,17 @@
   </head>
 
   <body>
+    <%			
+	  	response.setHeader("Cache-Control","no-cache"); 
+		response.setHeader("Cache-Control","no-store"); 
+		response.setDateHeader("Expires", -1);
+		response.setHeader("Pragma","no-cache"); 
+	%>
+	
+    <%	if(currUsrBeanId.isLoggedIn()){ %>
+    
 	<%
-		String studentName = currUsrBeanId.getStudent().getFirstName();
+		String studentName = currUsrBeanId.getStudent().getFirstName() + " " + currUsrBeanId.getStudent().getLastName();
 		String studentNumber = currUsrBeanId.getStudent().getENumber();
 		String studentAdvisor = currUsrBeanId.getStudent().getAdvisor();
 		String[] studentFirstYear = currUsrBeanId.getStudent().getYearOneClasses();
@@ -34,9 +43,9 @@
 		String studentMajorID = currUsrBeanId.getStudent().getMajorID();
 		String studentMajor = currUsrBeanId.getStudent().getMajor();
 		String studentRemainingCourses = currUsrBeanId.getStudent().getRemainingCourses();
-		System.out.println("DASHBOARD REMAINING COURSES: " + studentRemainingCourses);
+		//System.out.println("DASHBOARD REMAINING COURSES: " + studentRemainingCourses);
 		double studentRemainingCredits = currUsrBeanId.getStudent().getRemainingCredits();
-		System.out.println("DASHBOARD REMAINING CREDITS: " + studentRemainingCredits);
+		//System.out.println("DASHBOARD REMAINING CREDITS: " + studentRemainingCredits);
 		String[] studentRemainingFields = currUsrBeanId.getStudent().getRemainingGeneralFields();
 	
 		String[] courseInfoVar;
@@ -374,11 +383,6 @@
         		}
         	%>  	
       	</ul>
-      	
-      	<ul class="list-unstyled CTAs">
-        	<li><a href="Catalog.jsp" class="download">View Full Catalog</a></li>
-        	<li><a href="Contact.jsp" class="article">Learn More</a></li>
-       	</ul>
 	</nav>
     </div>  
     </main>
@@ -414,5 +418,7 @@
             });
         });
     </script>
+        <% } else { %>
+	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 </body>
 </html>

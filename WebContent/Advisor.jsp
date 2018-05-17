@@ -24,6 +24,13 @@
 </head>
 
 <body>
+  	<%			
+	  	response.setHeader("Cache-Control","no-cache"); 
+		response.setHeader("Cache-Control","no-store"); 
+		response.setDateHeader("Expires", -1);
+		response.setHeader("Pragma","no-cache"); 
+	%>
+	<%	if(currUsrBeanId.isLoggedIn() && !currUsrBeanId.isStudent()){ %>
 	<nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
 		<a class="navbar-brand page-scroll" href="Dashboard.jsp"><img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"></a>
@@ -128,5 +135,11 @@
 			document.getElementsById("defaultOpen").style.visibility = "block";
 		}
 	</script>
+	    <% } else if(currUsrBeanId.isLoggedIn() && currUsrBeanId.isStudent()) { 
+	    	response.sendRedirect("http://localhost:8080/Capstone_Final/Dashboard.jsp");
+	    } else{
+	    	
+	    %>
+	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
 </body>
 </html>

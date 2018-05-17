@@ -146,6 +146,7 @@
             			<div class="courseCell" id="firstYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
+            				if(studentFirstYear != null){
                   				for(int i=0; i < studentFirstYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentFirstYear[i]);
                   					
@@ -181,6 +182,7 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
+            				}
                   			%>
             			</div>
             		</div>
@@ -189,6 +191,7 @@
             			<div class="courseCell" id="secondYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
+            				if(studentSecondYear != null){
                   				for(int i=0; i < studentSecondYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentSecondYear[i]);
                   					if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
@@ -224,6 +227,7 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
+            				}
                   			%>
             			</div>
             		</div>
@@ -232,6 +236,7 @@
             			<div class="courseCell" id="thirdYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
+            				if(studentThirdYear != null){
                   				for(int i=0; i < studentThirdYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentThirdYear[i]);
                   					if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
@@ -267,6 +272,7 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
+            				}
                   			%>
             			</div>
             		</div>
@@ -275,6 +281,7 @@
             			<div class="courseCell" id="fourthYear" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             				Drag Course Here...
             				<%
+            				if(studentFourthYear != null){
                   				for(int i=0; i < studentFourthYear.length; i++){
                   					courseInfoVar = currUsrBeanId.getCourseInfo(studentFourthYear[i]);
                   					if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
@@ -310,6 +317,7 @@
               							out.println("</ul>");
               						out.println("</div>");	
                   				}
+            				}
                   			%>
             			</div>
             		</div>

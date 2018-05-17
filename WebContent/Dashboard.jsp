@@ -139,39 +139,41 @@
                   <button class="accordion active" id="CourseButton"><h2>Current Courses</h2></button>
                   <div class="panel" style="display: block;">
                   	<%
-                  		for(int i=0; i < studentFirstYear.length; i++){
-                  			courseInfoVar = currUsrBeanId.getCourseInfo(studentFirstYear[i]);
-                  			if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
-          						creditVar = courseInfoVar[4];	
-          					} else {
-          						creditVar = "Not Available";
-          					}
-          					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
-          						aokVar = courseInfoVar[5];	
-          					} else {
-          						aokVar = "No AoKs";
-          					}
-          					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
-          						tagVar = courseInfoVar[6];	
-          					} else {
-          						tagVar = "No Tags";
-          					}
-          					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
-          						preReqVar = courseInfoVar[8];	
-          					} else {
-          						preReqVar = "No Prerequisites";
-          					}
-                  			
-                  			
-                  			out.println("<div class=\"CoursePanel\">");
-              					out.println(studentFirstYear[i]);
-              					out.println("<ul>");
-              						out.println("<li>Credits: " + creditVar + "</li>");
-              						out.println("<li>AoKs: " + aokVar + "</li>");
-              						out.println("<li>Tags: " + tagVar + "</li>");
-              					out.println("</ul>");
-              				out.println("</div>");	
-                  		}
+                  		if(studentFirstYear != null){
+                  			for(int i=0; i < studentFirstYear.length; i++){
+                      			courseInfoVar = currUsrBeanId.getCourseInfo(studentFirstYear[i]);
+                      			if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
+              						creditVar = courseInfoVar[4];	
+              					} else {
+              						creditVar = "Not Available";
+              					}
+              					if(courseInfoVar[5] != null && !courseInfoVar[5].isEmpty()){
+              						aokVar = courseInfoVar[5];	
+              					} else {
+              						aokVar = "No AoKs";
+              					}
+              					if(courseInfoVar[6] != null && !courseInfoVar[6].isEmpty()){
+              						tagVar = courseInfoVar[6];	
+              					} else {
+              						tagVar = "No Tags";
+              					}
+              					if(courseInfoVar[8] != null && !courseInfoVar[8].isEmpty()){
+              						preReqVar = courseInfoVar[8];	
+              					} else {
+              						preReqVar = "No Prerequisites";
+              					}
+                      			
+                      			
+                      			out.println("<div class=\"CoursePanel\">");
+                  					out.println(studentFirstYear[i]);
+                  					out.println("<ul>");
+                  						out.println("<li>Credits: " + creditVar + "</li>");
+                  						out.println("<li>AoKs: " + aokVar + "</li>");
+                  						out.println("<li>Tags: " + tagVar + "</li>");
+                  					out.println("</ul>");
+                  				out.println("</div>");	
+                      		}
+                  		}	
                   	%>
                   </div>
                 </li>
@@ -185,6 +187,7 @@
                   			<button class="accordion active" id="CourseButton">Second Year</button>
                     			<div class="panel" style="display: block;">
                       				<%
+                      				if(studentSecondYear != null){
                       					for(int i=0; i < studentSecondYear.length; i++){
                       						courseInfoVar = currUsrBeanId.getCourseInfo(studentSecondYear[i]);
                       						if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
@@ -217,11 +220,13 @@
                   								out.println("</ul>");
                   							out.println("</div>");	
                       					}
+                      				}
                   					%>
                     			</div>
                     		<button class="accordion" id="CourseButton">Third Year</button>
                     			<div class="panel">
                       				<%
+                      				if(studentThirdYear != null){
                       					for(int i=0; i < studentThirdYear.length; i++){
                       						courseInfoVar = currUsrBeanId.getCourseInfo(studentThirdYear[i]);
                       						if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
@@ -254,11 +259,13 @@
                   								out.println("</ul>");
                   							out.println("</div>");	
                       					}
+                      				}
                   					%>
                     			</div>
                     		<button class="accordion" id="CourseButton">Fourth Year</button>
                     			<div class="panel">
                       				<%
+                      				if(studentFourthYear != null){
                       					for(int i=0; i < studentFourthYear.length; i++){
                       						courseInfoVar = currUsrBeanId.getCourseInfo(studentFourthYear[i]);
                       						if(courseInfoVar[4] != null && !courseInfoVar[4].isEmpty()){
@@ -291,6 +298,7 @@
                   								out.println("</ul>");
                   							out.println("</div>");	
                       					}
+                      				}
                   					%>
                     			</div>
                   		</div>

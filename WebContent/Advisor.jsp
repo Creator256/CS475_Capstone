@@ -33,13 +33,14 @@
 	<%	if(currUsrBeanId.isLoggedIn() && !currUsrBeanId.isStudent()){ %>
 	<nav class="navbar navbar-expand-md navbar-dark" style="background-color:#0c2340">
 
-		<a class="navbar-brand page-scroll" href="Dashboard.jsp"><img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"></a>
+		<a class="navbar-brand page-scroll" href="Advisor.jsp"><img src="images/clogo.png" class="img-rounded" style="width:200px; height:auto;"></a>
 		<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
 		<div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
 			<ul class="navbar-nav mr-auto">
+			<!--  
 				<li class="nav-item active">
 					<a class="nav-link" href="Dashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
 				</li>
@@ -52,6 +53,7 @@
 				<li class="nav-item">
 					<a class="nav-link" href="Contact.jsp">Contact</a>
 				</li>
+				-->
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">

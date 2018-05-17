@@ -146,6 +146,7 @@
     <script src="js/bootstrap.min.js"></script>
 
 	<script>
+	<!--
 	function sortTable(table, col, reverse) {
 	    var tb = table.tBodies[0], // use `<tbody>` to ignore `<thead>` and `<tfoot>` rows
 	        tr = Array.prototype.slice.call(tb.rows, 0), // put rows into array
@@ -174,9 +175,11 @@
 	function makeAllSortable(parent) {
 		makeSortable(document.getElementById('coursesTable'));
 	}
+	-->
 	document.addEventListener('DOMContentLoaded',function() {
 	    document.querySelector('input[id="searchStringInput"]').onkeyup=filterSearchCourses;
 	},false);
+	
 	
 	function filterSearchCourses(event) {
 		//console.log(event.target.value);
@@ -207,7 +210,7 @@
 		}
 	}
 	
-	window.onload = function () {makeAllSortable();};
+	<!-- window.onload = function () {makeAllSortable();}; -->
 	</script>
 	    <% } else { %>
 	<% response.sendRedirect("http://localhost:8080/Capstone_Final/Login.jsp");} %>
